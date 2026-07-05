@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Romantic Game Night</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff758c, #ff7eb3, #eeb8ff, #fad0c4);
+
+        }
+        .game-container {
+            display: flex;
+            justify-content: center;  /* Centers items horizontally */
+            align-items: center;      /* Centers items vertically */
+            flex-wrap: nowrap;        /* Ensures items remain in a row */
+            gap: 20px;                /* Adds spacing between cards */
+            margin-top: 20px;
+        }
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid #333;
+            background: conic-gradient(
+                red 0deg 45deg,
+                yellow 45deg 90deg,
+                green 90deg 135deg,
+                blue 135deg 180deg,
+                orange 180deg 225deg,
+                purple 225deg 270deg,
+                pink 270deg 315deg,
+                cyan 315deg 360deg
+            );
+            transition: transform 4s ease-out;
+        }
+        .arrow {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 30px solid black;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .scratch-container {
+            display: grid;
+            grid-template-columns: repeat(20, 50px);
+            grid-template-rows: repeat(50, 50px);
+            gap: 5px;
+        }
+        .scratch-card {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+        .scratch-image {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .scratch-overlay {
+            width: 100%;
+            height: 100%;
+            background: gray;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+        /* Responsive Styles */
+
+/* Medium screens */
+@media (max-width: 1024px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    main {
+        padding: 15px;
+    }
+
+    footer {
+        font-size: 0.8em;
+    }
+}
+
+/* Small screens (tablets, phones in portrait) */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    footer {
+        font-size: 0.75em;
+    }
+}
+
+/* Very small screens (phones in landscape or smaller) */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    main {
+        padding: 5px;
+    }
+
+    footer {
+        font-size: 0.7em;
+    }
+
+    /* Adjusting layout for small screens */
+    .content-box {
+        margin: 10px 0;
+        padding: 10px;
+    }
+}
+    </style>
+</head>
+<body>
+    <h1>Romantic Game Night</h1>
+    <div class="game-container">
+        <div>
+            <h2>Spin the Wheel</h2>
+            <div class="wheel-container">
+                <div class="arrow" ></div>
+                <div class="wheel" id="wheel"></div>
+            </div>
+            <div></div>
+            <button onclick="spinWheel()">Spin</button>
+            <p id="result"></p>
+        </div>
+        </div>
+        
+        <style>
+        
+            .card {
+                position: relative;
+                width: 150px;
+                height: 200px;
+                background-color: #ddd;
+                overflow: hidden;
+            }
+            .card canvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+                cursor: pointer;
+            }
+            .controls {
+                margin-top: 0px;
+            }
+        </style>
+        <h1>😍SCRATCH AND HAVE FUN 😍</h1>
+        <div class="game-container" id="game-container"></div>
+        <div class="controls">
+            <button onclick="stopTimer()">Stop Timer</button>
+            <p>Timer: <span id="timer">0</span> seconds</p>
+        </div>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                background: linear-gradient(to right, #ff9a9e, #fad0c4);
+                margin: 0;
+                padding: 0;
+            }
+    
+            .container {
+                max-width: 600px;
+                margin: 100px auto;
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+    
+            .title {
+                font-size: 36px;
+                font-weight: bold;
+                color: #ff758c;
+                margin-bottom: 20px;
+            }
+    
+            .date-idea {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 20px;
+                padding: 15px;
+                background: #ffdfd3;
+                border-radius: 10px;
+            }
+    
+            button {
+                padding: 10px 20px;
+                font-size: 18px;
+                background: #ff758c;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            }
+    
+            button:hover {
+                background: #ff5263;
+            }
+        </style>
+    </head>
+    <body>
+    
+        <div class="container">
+            <div class="title">Date Night Generator 🎭</div>
+            <div id="date-idea" class="date-idea">Click the button below for a romantic date idea.</div>
+            <button onclick="generateDateNight()">Get Date Idea</button>
+        </div>
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin the Circle - Dare Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+        }
+        .activity-frame {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .circle-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+        }
+        .circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid black;
+            position: relative;
+            transition: transform 3s ease-out;
+        }
+        .action-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #ff758c;
+            color: white;
+            transition: 0.3s;
+        }
+        .action-btn:hover {
+            background: #ff5263;
+        }
+        .outcome {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .player-input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="activity-frame">
+        <h2>Spin the Circle - Dare Challenge</h2>
+        <input type="text" id="contestants" class="player-input" placeholder="Enter players separated by commas">
+        <button class="action-btn" onclick="setContestants()">Set Contestants</button>
+        <div class="circle-container">
+            <div class="circle" id="spin-circle">
+                <img src="https://play-lh.googleusercontent.com/4Kp0-pJ_rTEw5kPawuitRgG0R5sGagHJkqLvRTXRoh7rpM7qv08E8wXEPvw2a_BkQ9vM" 
+                     alt="Spinning Wheel" class="circle-image">
+            </div>
+        </div>
+        <button class="action-btn" onclick="spinCircle()">Spin the Circle</button>
+        <p class="outcome" id="outcome"></p>
+    </div>
+    
+    <style>
+        .circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 5px solid black;
+            transition: transform 3s ease-out; /* Keep consistent fast spin */
+        }
+    
+        .circle-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+    
+    <script>
+        let currentRotation = 0; // Track accumulated rotation
+    
+        function spinCircle() {
+            const circle = document.getElementById("spin-circle");
+    
+            // Generate a random additional spin between 1800° and 3600° (fast and random)
+            let randomSpin = Math.floor(Math.random() * 1800) + 1800; 
+    
+            // Reset the transition to ensure no slowing down
+            circle.style.transition = "transform 3s ease-out";  // Set transition speed consistently
+            
+            // Accumulate the rotation
+            currentRotation += randomSpin;
+    
+            // Apply the spinning effect with no slowing down, ensuring fast and smooth
+            circle.style.transform = `rotate(${currentRotation}deg)`;
+        }
+    </script>
+    
+    
+    
+    <style>
+        .circle {
+            width: 100%; /* Adjust as needed */
+            height: 100%; /* Adjust as needed */
+            border-radius: 50%;
+            overflow: hidden; /* Ensures the image stays inside the circle */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 5px solid black;
+        }
+    
+        .circle-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the image covers the circle properly */
+        }
+    </style>
+    
+    <script>
+        // Sample dares for the challenge
+        const dares = [
+            "Kiss your partner! 💋",
+            "Give a 30-second massage! 💆",
+            "Sing a romantic song to someone! 🎤",
+            "Do a slow dance for 1 minute! 💃",
+            "Whisper something spicy in someone’s ear! 🔥",
+            "Do 10 push-ups while someone sits on your back! 💪",
+            "Let someone draw on your face with lipstick! 💄",
+            "Take a sip of your drink without using your hands! 🍹",
+            "Compliment everyone in the group! 😊",
+            "Send a random romantic text to your last contact! 📱"
+        ];
+
+        // Declare the contestants array globally
+        let contestants = [];
+
+        // Function to set contestants from input
+        function setContestants() {
+            const contestantsInput = document.getElementById("contestants").value;
+            contestants = contestantsInput.split(",").map(contestant => contestant.trim());
+
+            if (contestants.length < 2) {
+                alert("Please enter at least two contestant names!");
+                return;
+            }
+            alert("Contestants have been set. Click on 'Spin the Circle' to play!");
+        }
+
+        // Shuffle function to randomly reorder the contestant list (Fisher-Yates algorithm)
+        function shuffleList(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+        }
+
+        // Function to spin the circle and fairly select a random contestant
+        function spinCircle() {
+            if (contestants.length < 2) {
+                alert("Please enter contestant names first!");
+                return;
+            }
+
+            // Shuffle the contestants array to ensure a fair distribution
+            shuffleList(contestants);
+
+            // Get the circle and outcome display elements
+            const circle = document.getElementById("spin-circle");
+            const outcome = document.getElementById("outcome");
+
+            // Spin the circle fast
+            let randomSpin = Math.floor(Math.random() * 3600) + 1800;  // Random fast spin between 1800° and 3600°
+            let duration = 4000; // Total time the spin will take (4 seconds)
+
+            // Apply the fast spin to the circle
+            circle.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`; // Fast spin with easing
+            circle.style.transform = `rotate(${randomSpin}deg)`;  // Spin the circle
+
+            // Once the spinning finishes, calculate the resulting contestant
+            setTimeout(() => {
+                // Calculate the landed position based on the rotation
+                let finalDegree = randomSpin % 360;  // Get the final position of the circle
+                let numberOfSections = contestants.length;  // Number of contestants (sections of the circle)
+                let sectionSize = 360 / numberOfSections; // Size of each section (degree per contestant)
+
+                // Find which contestant the circle landed on
+                let landedIndex = Math.floor(finalDegree / sectionSize);
+                const selectedContestant = contestants[landedIndex];
+                const randomDare = dares[Math.floor(Math.random() * dares.length)];
+
+                // Display the outcome
+                outcome.innerHTML = `${selectedContestant}, your challenge: ${randomDare}`;
+                startChallengeTimer();  // Optionally add a timer for the challenge
+            }, duration);
+        }
+
+        // Timer function (optional)
+        function startChallengeTimer() {
+            let timeLeft = 30;  // Set a 30-second timer for the challenge
+            const timerDisplay = document.createElement('p');
+            const outcome = document.getElementById("outcome");
+            outcome.appendChild(timerDisplay);
+            const timer = setInterval(() => {
+                timerDisplay.innerText = `Time left: ${timeLeft}s`;
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerDisplay.innerText = "Time's up! 🍑";
+                }
+            }, 1000);
+        }
+
+    </script>
+</body>
+</html>
+
+        <script>
+            const dateIdeas = [
+                "Candlelit dinner at home 🍷",
+                "Movie night with popcorn 🍿",
+                "Stargazing with cozy blankets ✨",
+                "Spa night with massages 💆",
+                "Cooking a new recipe together 🍳",
+                "Board game night with snacks 🎲",
+                "A scenic sunset walk 🌅",
+                "DIY wine and paint night 🎨",
+                "Road trip to a mystery location 🚗",
+                "Dancing in the living room 💃",
+                "Ice cream date 🍦",
+                "A picnic in the park 🧺",
+                "Trying a new restaurant 🍽️",
+                "Exploring a nearby town 🏙️",
+                "Watching old home videos 🎥",
+                "Building a fort and watching movies 🏰",
+                "Hiking and enjoying nature ⛰️",
+                "Writing love letters to each other 💌",
+                "Taking a bubble bath together 🛁",
+                "Going on a late-night drive 🚙",
+                "Karaoke night at home 🎤",
+                "At-home game night with your favorite video games 🎮",
+                "Going to a comedy club for laughs 😂",
+                "Sunset picnic by the lake 🏞️",
+                "Dance class together 💃",
+                "Taking a cooking class together 🍝",
+                "Going to a local art gallery 🎨",
+                "Drive-in movie theater night 🍿",
+                "Going to a theme park 🎢",
+                "Staying up late and stargazing ✨",
+                "Writing poetry for each other 📝",
+                "Play a sport together (e.g. tennis, bowling) 🎾",
+                "Create a scrapbook of your favorite memories 📚",
+                "Go ice skating together ⛸️",
+                "Volunteer together for a cause you both care about 💖",
+                "A day at the zoo or aquarium 🐒🐠",
+                "Night at a jazz bar 🎷",
+                "Try a new coffee shop for a cozy date ☕",
+                "Visit a nearby botanical garden 🌸",
+                "Going horseback riding 🐎",
+                "Camping under the stars 🏕️",
+                "Visit a haunted house or escape room 🕵️‍♀️",
+                "Go on a bike ride together 🚲",
+                "Make a playlist of songs that remind you of each other 🎶",
+                "Take a pottery class together 🍶",
+                "Watch the sunrise together 🌅",
+                "Do a photo shoot with each other 📸",
+                "Explore a farmer’s market together 🥕",
+                "Plan your dream vacation together ✈️",
+                "Try a dance-off at home 🕺",
+                "Build a snowman (if it’s winter) ☃️",
+                "Go for a long walk in the rain 🌧️",
+                "Take a day trip to a nearby town or village 🚗",
+                "Go thrift shopping together 🛍️",
+                "Read a book together 📚",
+                "Visit an amusement park 🎡",
+                "Play a fun outdoor game together (like frisbee or badminton) 🏸",
+                "Attend a local event or festival 🎪",
+                "Watch the sunset from the beach 🌊",
+                "Go for a drive with no destination in mind 🚙",
+                "Take a scenic train ride 🚂",
+                "Try a cooking competition at home 🍴",
+                "Rent a boat for the day ⛵",
+                "Go to a wine or beer tasting together 🍷",
+                "Attend a live concert or show 🎶",
+                "Spend the day at an animal sanctuary 🦄",
+                "Do a puzzle together 🧩",
+                "Visit a museum or science center 🏛️",
+                "Go to a rooftop bar or restaurant 🍸",
+                "Take a dance class together 💃",
+                "Try a couples’ yoga class 🧘‍♀️",
+                "Have a DIY cocktail night 🍹",
+                "Watch a romantic movie under the stars 🌟"
+            ];
+    
+            function generateDateNight() {
+                const randomIndex = Math.floor(Math.random() * dateIdeas.length);
+                const dateIdea = dateIdeas[randomIndex];
+                document.getElementById("date-idea").innerText = dateIdea;
+            }
+        </script>
+        <script>
+            let cards = [
+                { name: "Prize 1", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Wiki-missionary.png/640px-Wiki-missionary.png" },
+                { name: "Prize 2", image: "https://hips.hearstapps.com/hmg-prod/images/unspecified-5-1481652714.jpg" },
+                { name: "Prize 3", image: "https://hips.hearstapps.com/hmg-prod/images/2-low-down-reverse-cowgirl-66bd0eb81066b.jpg?crop=0.888888888888889xw:1xh;center,top" },
+                { name: "Prize 4", image: "https://upload.wikimedia.org/wikipedia/commons/2/20/Wiki-spoons-sp.png" },
+                { name: "Prize 5", image: "https://cdn.shopify.com/s/files/1/0583/1816/0063/files/Holding_your_partner_against_the_wall_Standing_Position.png?v=1716839020" }
+            ];
+            let timer = 0, timerInterval;
+    
+            function startTimer() {
+                if (!timerInterval) {
+                    timerInterval = setInterval(() => {
+                        document.getElementById("timer").innerText = ++timer;
+                    }, 1000);
+                }
+            }
+    
+            function stopTimer() {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+    
+            function createScratchCard(cardData, index) {
+                const card = document.createElement("div");
+                card.classList.add("card");
+                
+                const img = document.createElement("img");
+                img.src = cardData.image;
+                img.style.width = "100%";
+                img.style.height = "100%";
+                card.appendChild(img);
+                
+                const canvas = document.createElement("canvas");
+                canvas.width = 150;
+                canvas.height = 200;
+                card.appendChild(canvas);
+                
+                const ctx = canvas.getContext("2d");
+                ctx.fillStyle = "gray";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                let isScratching = false;
+                canvas.addEventListener("mousedown", () => isScratching = true);
+                canvas.addEventListener("mouseup", () => isScratching = false);
+                canvas.addEventListener("mousemove", (e) => {
+                    if (isScratching) {
+                        const rect = canvas.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        ctx.clearRect(x, y, 20, 20);
+                        startTimer();
+                    }
+                });
+                return card;
+            }
+    
+            function loadGame() {
+                const container = document.getElementById("game-container");
+                container.innerHTML = "";
+                let selectedCards = cards.sort(() => 0.5 - Math.random()).slice(0, 3);
+                selectedCards.forEach((card, index) => {
+                    container.appendChild(createScratchCard(card, index));
+                });
+            }
+    
+            loadGame();
+        </script>
+    
+    <script>
+        let currentDegree = 0;
+
+        function spinWheel() {
+            const wheel = document.getElementById("wheel");
+            const result = document.getElementById("result");
+        
+            // Set the spin duration and total rotations
+            const baseSpeed = 1440;  // Min spin speed (4 rotations)
+            const randomDegree = baseSpeed + Math.floor(Math.random() * 360) + 1800;  // Ensure the wheel spins at least 5 times
+            const totalRotation = currentDegree + randomDegree;
+        
+            // Set a fixed spin speed for all spins (4 seconds)
+            const spinDuration = 4;  // in seconds
+        
+            // Apply the spin speed (same duration for each spin)
+            wheel.style.transition = `transform ${spinDuration}s ease-out`;
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+        
+            // Update the current degree for the next spin
+            currentDegree += randomDegree;
+        
+            setTimeout(() => {
+                const sections = [
+                    "Give a hug", "Say I love you", "Compliment your partner", "Hold hands for 1 minute", 
+                    "Share a sweet secret", "Do a funny dance", "Whisper something romantic", 
+                    "Look into each other's eyes for 30 seconds", "Give a forehead kiss", "Write a love note", 
+                    "Give a back massage", "Share your favorite memory together", "Sing a love song", 
+                    "Slow dance together", "Tell your partner what you love most about them", "Give a playful tickle", 
+                    "Share a piece of chocolate", "Surprise your partner with a small gift", "Say something sweet in another language", 
+                    "Share a happy memory from your relationship", "Cook something together", "Watch a romantic movie together", 
+                    "Hold your partner’s face gently and smile", "Give a small peck on the nose", "Say what you admire about your partner", 
+                    "Share a dream or goal with each other", "Draw a heart on your partner’s palm", "Take a silly selfie together", 
+                    "Hold your partner from behind", "Say your favorite thing about their personality", "Give a loving nudge or playful push", 
+                    "Write I love you on their hand with your finger", "Pretend you just met and flirt with your partner", 
+                    "Share your favorite inside joke", "Gaze at the stars together even if it's indoors", "Make a pinky promise", 
+                    "Tell your partner your favorite feature about them", "Give a loving high-five", "Say something poetic to your partner", 
+                    "Make a heart shape with your hands", "Mimic the way your partner talks or laughs playfully", "Dance without music for 30 seconds", 
+                    "Give a kiss on the hand", "Say you mean the world to me", "Hold your partner close for 10 seconds", 
+                    "Pretend to propose or do it for real", "Blow a kiss from across the room", "Create a secret handshake", 
+                    "Feed your partner a bite of something sweet", "Wink at your partner flirtatiously", "Trace your partner's face with your finger", 
+                    "Say I'm lucky to have you", "Write a short love poem on a napkin or paper", "Plan a surprise date idea", 
+                    "Play a romantic song and hum along", "Do an exaggerated romantic gesture from a movie", "Try to make each other laugh for 1 minute", 
+                    "Say what your life would be like without them", "Wrap your arms around your partner like a cozy blanket", 
+                    "Whisper a sweet nickname in their ear", "Pretend to be a famous romantic couple", "Read a short love quote aloud", 
+                    "Draw a picture of your partner", "Share one thing you’ve never told them before", "Say what makes your partner unique and special", 
+                    "Call your partner by a pet name in a dramatic way", "Blow a raspberry on their cheek or hand", 
+                    "Make a heart with your fingers and hold it up to them", "Tell your partner something you find irresistible about them", 
+                    "Give a warm forehead touch", "Say you're my favorite person in the world", "Describe how your partner makes your life better", 
+                    "Take turns writing a short love story together", "Say what made you fall in love with them", "Try to guess each other's favorite romantic movie", 
+                    "Act out a cute romantic scene from a movie", "Tell your partner what color reminds you of them and why", "Do an air kiss from far away", 
+                    "Give a butterfly kiss blink your eyelashes on their skin", "Share one fun fact about your love story", 
+                    "Draw a heart somewhere on their hand with your finger", "Make a wish together while holding hands", "Reminisce about your first date", 
+                    "Share a favorite song lyric about love", "Say how you knew they were the one", "Write I love you in a creative way backwards symbols etc", 
+                    "Have a mini staring contest with a twist whoever smiles first loses", "Whisper I miss you even if they are right there", 
+                    "Pretend to be in a romantic movie and act it out", "Make a cute little sketch of both of you together", "Give a sweet kiss on the cheek", 
+                    "Say you complete me in your most dramatic voice", "Tell your partner a romantic fantasy you have", "Do a goofy love dance to make them laugh", 
+                    "Write down three things you adore about them and read them out loud", "Play a quick romantic guessing game guess my favorite memory of us", 
+                    "Leave a surprise love note somewhere for them to find later", "Say what your ideal romantic date with them would be", 
+                    "End with a long warm hug"
+                ];
+        
+                // Pick a random index from the sections array
+                const randomIndex = Math.floor(Math.random() * sections.length);
+                result.innerText = "Result: " + sections[randomIndex];
+            }, spinDuration * 1000); // Wait for the animation to complete before showing the result
+        }
+        // Function to handle dynamic resizing
+function adjustLayout() {
+    const screenWidth = window.innerWidth;
+
+    // Example: Adjust header font size based on screen width
+    const header = document.querySelector('header h1');
+    if (screenWidth <= 480) {
+        header.style.fontSize = '1.5em';  // Smaller screens
+    } else if (screenWidth <= 768) {
+        header.style.fontSize = '2em';  // Medium screens
+    } else if (screenWidth <= 1024) {
+        header.style.fontSize = '2.5em';  // Larger tablets or small desktops
+    } else {
+        header.style.fontSize = '3em';  // Large screens like desktops
+    }
+
+    // Example: Adjust the padding of the main content
+    const main = document.querySelector('main');
+    if (screenWidth <= 480) {
+        main.style.padding = '5px';
+    } else if (screenWidth <= 768) {
+        main.style.padding = '10px';
+    } else if (screenWidth <= 1024) {
+        main.style.padding = '15px';
+    } else {
+        main.style.padding = '20px';
+    }
+}
+
+// Call adjustLayout function when the page loads or when resizing the window
+window.addEventListener('load', adjustLayout);
+window.addEventListener('resize', adjustLayout);
+
+    </script>
+   
+</body>
+</html>

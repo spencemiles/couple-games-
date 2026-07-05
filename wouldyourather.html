@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>💞 Would You Rather · Couples Edition</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: radial-gradient(circle at 20% 30%, #fce4ec, #f8e0e8);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .game-card {
+      background: rgba(255, 248, 250, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 2.2rem 1.8rem;
+      border-radius: 48px;
+      box-shadow: 0 20px 50px rgba(180, 40, 80, 0.12), 0 0 0 1px rgba(255,255,255,0.6);
+      max-width: 620px;
+      width: 100%;
+      text-align: center;
+      transition: 0.3s;
+    }
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #d43f6b, #b02a55);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.25rem;
+    }
+    .subhead {
+      color: #6b4b57;
+      font-weight: 500;
+      margin-bottom: 1.8rem;
+      font-size: 1rem;
+      border-bottom: 2px dashed #f2b8c9;
+      padding-bottom: 0.8rem;
+    }
+    .prompt-box {
+      background: white;
+      border-radius: 32px;
+      padding: 1.8rem 1.2rem;
+      margin: 1.5rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .question-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #2d1b22;
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.2rem 0;
+    }
+    .option-btn {
+      background: #fce4ec;
+      border: 2px solid #f0c8d4;
+      border-radius: 20px;
+      padding: 1rem 0.8rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #3d2a33;
+      cursor: pointer;
+      transition: 0.2s;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .option-btn:hover {
+      background: #ffd9e3;
+      border-color: #ff4d7a;
+      transform: scale(0.98);
+    }
+    .option-btn.selected-a {
+      background: #ff4d7a;
+      border-color: #ff4d7a;
+      color: white;
+    }
+    .option-btn.selected-b {
+      background: #8e44ad;
+      border-color: #8e44ad;
+      color: white;
+    }
+    .stats-display {
+      margin: 1rem 0;
+      font-size: 0.95rem;
+      color: #5a4a54;
+      background: rgba(255,255,255,0.5);
+      border-radius: 40px;
+      padding: 0.6rem 1rem;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .stats-display span {
+      font-weight: 600;
+      color: #b02a55;
+    }
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-top: 1.2rem;
+    }
+    .btn {
+      background: #ff4d7a;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 4px 12px rgba(255,45,85,0.2);
+      flex: 1 1 auto;
+      min-width: 120px;
+    }
+    .btn:hover {
+      background: #e63e6a;
+      transform: scale(0.97);
+    }
+    .btn.secondary {
+      background: #b3a0b0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .btn.secondary:hover { background: #9e8a9b; }
+    .btn.purple {
+      background: #8e44ad;
+      box-shadow: 0 4px 12px rgba(142,68,173,0.25);
+    }
+    .btn.purple:hover { background: #7d3c98; }
+    .counter {
+      font-size: 0.85rem;
+      color: #8a7a84;
+      margin-top: 0.8rem;
+    }
+    .mood-badge {
+      display: inline-block;
+      background: #ffe2eb;
+      padding: 0.25rem 1.2rem;
+      border-radius: 40px;
+      color: #8f4b5e;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin-top: 0.5rem;
+    }
+    @media (max-width: 480px) {
+      .game-card { padding: 1.5rem 1rem; }
+      h1 { font-size: 2rem; }
+      .options-grid { grid-template-columns: 1fr; }
+      .option-btn { min-height: 60px; }
+      .btn { min-width: 100px; padding: 0.7rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="game-card">
+  <h1>💞 Would You Rather</h1>
+  <div class="subhead">· romantic · playful · intimate ·</div>
+
+  <div class="prompt-box">
+    <div class="question-text" id="questionDisplay">Would you rather...</div>
+    <div class="options-grid">
+      <button class="option-btn" id="optionA">Option A</button>
+      <button class="option-btn" id="optionB">Option B</button>
+    </div>
+    <div class="stats-display" id="statsDisplay">
+      <span>❤️ A: <span id="statA">0%</span></span>
+      <span>💜 B: <span id="statB">0%</span></span>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="btn" id="nextBtn">🎲 Next</button>
+    <button class="btn purple" id="surpriseBtn">✨ Surprise</button>
+    <button class="btn secondary" id="resetBtn">🔄 Reset</button>
+  </div>
+
+  <div class="counter" id="counterDisplay">Question 1 / 200+</div>
+  <div class="mood-badge" id="moodBadge">❤️ romantic mode</div>
+</div>
+
+<script>
+  // ============================================================
+  //  MASSIVE QUESTION LIST – 200+ refined romantic & playful prompts
+  // ============================================================
+
+  const questions = [
+    { a: "give a 10-minute massage 💆", b: "send flirty emojis only for a day 😜", stats: { A: 45, B: 55 } },
+    { a: "make a couples playlist 🎧", b: "bake something sweet together 🍰", stats: { A: 42, B: 58 } },
+    { a: "make a couples playlist 🎧", b: "dance in your underwear 🩲", stats: { A: 47, B: 53 } },
+    { a: "make a couples playlist 🎧", b: "draw each other 💖", stats: { A: 44, B: 56 } },
+    { a: "go skinny dipping 🌊", b: "fall asleep on a video call 📱", stats: { A: 50, B: 50 } },
+    { a: "give a 10-minute massage 💆", b: "wake up to kisses 💋", stats: { A: 52, B: 48 } },
+    { a: "give a lap dance 💃", b: "share a shower 🚿", stats: { A: 42, B: 58 } },
+    { a: "write a love poem ✍️", b: "receive a 10-minute massage 😌", stats: { A: 49, B: 51 } },
+    { a: "give a 10-minute massage 💆", b: "bake something sweet together 🍰", stats: { A: 58, B: 42 } },
+    { a: "have a blindfolded taste test 😋", b: "send a voice note moan 🎧", stats: { A: 43, B: 57 } },
+    { a: "exchange steamy dares 🔥", b: "bake something sweet together 🍰", stats: { A: 44, B: 56 } },
+    { a: "have a pillow fight 😆", b: "cuddle in a blanket fort 🏕️", stats: { A: 55, B: 45 } },
+    { a: "kiss for 60 seconds 😘", b: "have a tickle fight 🤭", stats: { A: 45, B: 55 } },
+    { a: "exchange steamy dares 🔥", b: "watch the sunset together 🌅", stats: { A: 51, B: 49 } },
+    { a: "have a blindfolded taste test 😋", b: "have a flirty photo shoot 📷", stats: { A: 44, B: 56 } },
+    { a: "go skinny dipping 🌊", b: "play with ice cubes 🧊", stats: { A: 51, B: 49 } },
+    { a: "hold hands in public 👫", b: "have a tickle fight 🤭", stats: { A: 55, B: 45 } },
+    { a: "wake up to cuddles ☀️", b: "write love notes 📝", stats: { A: 45, B: 55 } },
+    { a: "cook dinner together 🍝", b: "bake something sweet together 🍰", stats: { A: 44, B: 56 } },
+    { a: "kiss in the rain 🌧️", b: "send flirty emojis only for a day 😜", stats: { A: 46, B: 54 } },
+    { a: "cuddle all night 🐻", b: "watch the sunset together 🌅", stats: { A: 44, B: 56 } },
+    { a: "slow dance in the kitchen 💃", b: "exchange secret fantasies 🔐", stats: { A: 45, B: 55 } },
+    { a: "go skinny dipping 🌊", b: "have a tickle fight 🤭", stats: { A: 46, B: 54 } },
+    { a: "kiss in the rain 🌧️", b: "kiss under the stars ✨", stats: { A: 52, B: 48 } },
+    { a: "make a couples playlist 🎧", b: "play truth or dare 😈", stats: { A: 43, B: 57 } },
+    { a: "have a pillow fight 😆", b: "fall asleep on a video call 📱", stats: { A: 47, B: 53 } },
+    { a: "play a strip game 🃏", b: "have a flirty photo shoot 📷", stats: { A: 50, B: 50 } },
+    { a: "give a 10-minute massage 💆", b: "watch the sunset together 🌅", stats: { A: 53, B: 47 } },
+    { a: "have a pillow fight 😆", b: "draw each other 💖", stats: { A: 46, B: 54 } },
+    { a: "play a strip game 🃏", b: "bake something sweet together 🍰", stats: { A: 47, B: 53 } },
+    { a: "have a blindfolded taste test 😋", b: "wake up to kisses 💋", stats: { A: 53, B: 47 } },
+    { a: "go skinny dipping 🌊", b: "have a flirty photo shoot 📷", stats: { A: 58, B: 42 } },
+    { a: "play a strip game 🃏", b: "draw each other 💖", stats: { A: 57, B: 43 } },
+    { a: "play a strip game 🃏", b: "fall asleep on a video call 📱", stats: { A: 49, B: 51 } },
+    { a: "whisper flirty secrets 😏", b: "make out in a car 🚗", stats: { A: 58, B: 42 } },
+    { a: "give a 10-minute massage 💆", b: "share a shower 🚿", stats: { A: 43, B: 57 } },
+    { a: "kiss in the rain 🌧️", b: "dance in your underwear 🩲", stats: { A: 47, B: 53 } },
+    { a: "whisper flirty secrets 😏", b: "bake something sweet together 🍰", stats: { A: 54, B: 46 } },
+    { a: "hold hands in public 👫", b: "do a love quiz 🧠", stats: { A: 41, B: 59 } },
+    { a: "whisper flirty secrets 😏", b: "write love notes 📝", stats: { A: 54, B: 46 } },
+    { a: "whisper flirty secrets 😏", b: "have a tickle fight 🤭", stats: { A: 43, B: 57 } },
+    { a: "give a lap dance 💃", b: "cuddle in a blanket fort 🏕️", stats: { A: 44, B: 56 } },
+    { a: "wake up to cuddles ☀️", b: "play with ice cubes 🧊", stats: { A: 46, B: 54 } },
+    { a: "have a blindfolded taste test 😋", b: "send flirty emojis only for a day 😜", stats: { A: 57, B: 43 } },
+    { a: "write a love poem ✍️", b: "send a voice note moan 🎧", stats: { A: 45, B: 55 } },
+    { a: "have a blindfolded taste test 😋", b: "have a tickle fight 🤭", stats: { A: 59, B: 41 } },
+    { a: "watch a steamy movie 🎬", b: "receive a 10-minute massage 😌", stats: { A: 40, B: 60 } },
+    { a: "write a love poem ✍️", b: "draw each other 💖", stats: { A: 43, B: 57 } },
+    { a: "slow dance in the kitchen 💃", b: "have a flirty photo shoot 📷", stats: { A: 42, B: 58 } },
+    { a: "write a love poem ✍️", b: "bake something sweet together 🍰", stats: { A: 48, B: 52 } },
+    { a: "kiss in the rain 🌧️", b: "exchange secret fantasies 🔐", stats: { A: 60, B: 40 } },
+    { a: "give a lap dance 💃", b: "play with ice cubes 🧊", stats: { A: 52, B: 48 } },
+    { a: "wake up to cuddles ☀️", b: "make out in a car 🚗", stats: { A: 54, B: 46 } },
+    { a: "kiss in the rain 🌧️", b: "receive a 10-minute massage 😌", stats: { A: 59, B: 41 } },
+    { a: "cook dinner together 🍝", b: "watch the sunset together 🌅", stats: { A: 53, B: 47 } },
+    { a: "give a 10-minute massage 💆", b: "write love notes 📝", stats: { A: 52, B: 48 } },
+    { a: "kiss in the rain 🌧️", b: "do a love quiz 🧠", stats: { A: 41, B: 59 } },
+    { a: "take a romantic bath 🛁", b: "send flirty emojis only for a day 😜", stats: { A: 49, B: 51 } },
+    { a: "have a blindfolded taste test 😋", b: "do a love quiz 🧠", stats: { A: 46, B: 54 } },
+    { a: "send a surprise selfie 📸", b: "have a flirty photo shoot 📷", stats: { A: 43, B: 57 } },
+    { a: "play a strip game 🃏", b: "receive a 10-minute massage 😌", stats: { A: 45, B: 55 } },
+    { a: "watch a steamy movie 🎬", b: "exchange secret fantasies 🔐", stats: { A: 50, B: 50 } },
+    { a: "kiss for 60 seconds 😘", b: "watch the sunset together 🌅", stats: { A: 56, B: 44 } },
+    { a: "wake up to cuddles ☀️", b: "receive a 10-minute massage 😌", stats: { A: 56, B: 44 } },
+    { a: "give a lap dance 💃", b: "fall asleep on a video call 📱", stats: { A: 60, B: 40 } },
+    { a: "send a surprise selfie 📸", b: "fall asleep on a video call 📱", stats: { A: 53, B: 47 } },
+    { a: "have a pillow fight 😆", b: "watch the sunset together 🌅", stats: { A: 58, B: 42 } },
+    { a: "make a couples playlist 🎧", b: "watch the sunset together 🌅", stats: { A: 40, B: 60 } },
+    { a: "wake up to cuddles ☀️", b: "bake something sweet together 🍰", stats: { A: 56, B: 44 } },
+    { a: "watch a steamy movie 🎬", b: "dance in your underwear 🩲", stats: { A: 44, B: 56 } },
+    { a: "take a romantic bath 🛁", b: "fall asleep on a video call 📱", stats: { A: 54, B: 46 } },
+    { a: "wake up to cuddles ☀️", b: "send a voice note moan 🎧", stats: { A: 52, B: 48 } },
+    { a: "cuddle all night 🐻", b: "have a tickle fight 🤭", stats: { A: 54, B: 46 } },
+    { a: "hold hands in public 👫", b: "wake up to kisses 💋", stats: { A: 45, B: 55 } },
+    { a: "take a romantic bath 🛁", b: "wake up to kisses 💋", stats: { A: 41, B: 59 } },
+    { a: "give a lap dance 💃", b: "have a flirty photo shoot 📷", stats: { A: 50, B: 50 } },
+    { a: "take a romantic bath 🛁", b: "draw each other 💖", stats: { A: 43, B: 57 } },
+    { a: "cook dinner together 🍝", b: "draw each other 💖", stats: { A: 52, B: 48 } },
+    { a: "slow dance in the kitchen 💃", b: "send flirty emojis only for a day 😜", stats: { A: 53, B: 47 } },
+    { a: "give a 10-minute massage 💆", b: "draw each other 💖", stats: { A: 47, B: 53 } },
+    { a: "give a 10-minute massage 💆", b: "dance in your underwear 🩲", stats: { A: 57, B: 43 } },
+    { a: "make a couples playlist 🎧", b: "do a love quiz 🧠", stats: { A: 53, B: 47 } },
+    { a: "slow dance in the kitchen 💃", b: "do a love quiz 🧠", stats: { A: 42, B: 58 } },
+    { a: "exchange steamy dares 🔥", b: "wake up to kisses 💋", stats: { A: 43, B: 57 } },
+    { a: "slow dance in the kitchen 💃", b: "dance in your underwear 🩲", stats: { A: 52, B: 48 } },
+    { a: "give a 10-minute massage 💆", b: "have a flirty photo shoot 📷", stats: { A: 58, B: 42 } },
+    { a: "write a love poem ✍️", b: "wake up to kisses 💋", stats: { A: 47, B: 53 } },
+    { a: "hold hands in public 👫", b: "kiss under the stars ✨", stats: { A: 53, B: 47 } },
+    { a: "slow dance in the kitchen 💃", b: "kiss under the stars ✨", stats: { A: 50, B: 50 } },
+    { a: "watch a steamy movie 🎬", b: "do a love quiz 🧠", stats: { A: 40, B: 60 } },
+    { a: "give a lap dance 💃", b: "send a voice note moan 🎧", stats: { A: 45, B: 55 } },
+    { a: "take a romantic bath 🛁", b: "dance in your underwear 🩲", stats: { A: 55, B: 45 } },
+    { a: "have a blindfolded taste test 😋", b: "dance in your underwear 🩲", stats: { A: 54, B: 46 } },
+    { a: "have a blindfolded taste test 😋", b: "make out in a car 🚗", stats: { A: 54, B: 46 } },
+    { a: "have a blindfolded taste test 😋", b: "receive a 10-minute massage 😌", stats: { A: 57, B: 43 } },
+    { a: "wake up to cuddles ☀️", b: "play truth or dare 😈", stats: { A: 58, B: 42 } },
+    { a: "play a strip game 🃏", b: "play with ice cubes 🧊", stats: { A: 56, B: 44 } },
+    { a: "cook dinner together 🍝", b: "cuddle in a blanket fort 🏕️", stats: { A: 45, B: 55 } },
+    { a: "exchange steamy dares 🔥", b: "have a flirty photo shoot 📷", stats: { A: 53, B: 47 } },
+    { a: "cook dinner together 🍝", b: "have a flirty photo shoot 📷", stats: { A: 40, B: 60 } },
+    { a: "have a pillow fight 😆", b: "wake up to kisses 💋", stats: { A: 44, B: 56 } },
+    { a: "play a strip game 🃏", b: "make out in a car 🚗", stats: { A: 54, B: 46 } },
+    { a: "slow dance in the kitchen 💃", b: "share a shower 🚿", stats: { A: 57, B: 43 } },
+    { a: "write a love poem ✍️", b: "cuddle in a blanket fort 🏕️", stats: { A: 57, B: 43 } },
+    { a: "wake up to cuddles ☀️", b: "draw each other 💖", stats: { A: 59, B: 41 } },
+    { a: "have a pillow fight 😆", b: "have a flirty photo shoot 📷", stats: { A: 60, B: 40 } },
+    { a: "go skinny dipping 🌊", b: "bake something sweet together 🍰", stats: { A: 53, B: 47 } },
+    { a: "make a couples playlist 🎧", b: "play with ice cubes 🧊", stats: { A: 52, B: 48 } },
+    { a: "cuddle all night 🐻", b: "kiss under the stars ✨", stats: { A: 45, B: 55 } },
+    { a: "exchange steamy dares 🔥", b: "send flirty emojis only for a day 😜", stats: { A: 57, B: 43 } },
+    { a: "have a pillow fight 😆", b: "dance in your underwear 🩲", stats: { A: 41, B: 59 } },
+    { a: "exchange steamy dares 🔥", b: "send a voice note moan 🎧", stats: { A: 59, B: 41 } },
+    { a: "kiss in the rain 🌧️", b: "bake something sweet together 🍰", stats: { A: 43, B: 57 } },
+    { a: "take a romantic bath 🛁", b: "play truth or dare 😈", stats: { A: 56, B: 44 } },
+    { a: "watch a steamy movie 🎬", b: "send flirty emojis only for a day 😜", stats: { A: 58, B: 42 } },
+    { a: "kiss for 60 seconds 😘", b: "play truth or dare 😈", stats: { A: 42, B: 58 } },
+    { a: "cook dinner together 🍝", b: "exchange secret fantasies 🔐", stats: { A: 42, B: 58 } },
+    { a: "play a strip game 🃏", b: "play truth or dare 😈", stats: { A: 43, B: 57 } },
+    { a: "wake up to cuddles ☀️", b: "exchange secret fantasies 🔐", stats: { A: 44, B: 56 } },
+    { a: "send a surprise selfie 📸", b: "have a tickle fight 🤭", stats: { A: 43, B: 57 } },
+    { a: "write a love poem ✍️", b: "kiss under the stars ✨", stats: { A: 48, B: 52 } },
+    { a: "have a pillow fight 😆", b: "exchange secret fantasies 🔐", stats: { A: 42, B: 58 } },
+    { a: "write a love poem ✍️", b: "play with ice cubes 🧊", stats: { A: 52, B: 48 } },
+    { a: "give a 10-minute massage 💆", b: "do a love quiz 🧠", stats: { A: 40, B: 60 } },
+    { a: "cuddle all night 🐻", b: "play with ice cubes 🧊", stats: { A: 41, B: 59 } },
+    { a: "kiss in the rain 🌧️", b: "play with ice cubes 🧊", stats: { A: 50, B: 50 } },
+    { a: "go skinny dipping 🌊", b: "cuddle in a blanket fort 🏕️", stats: { A: 43, B: 57 } },
+    { a: "wake up to cuddles ☀️", b: "share a shower 🚿", stats: { A: 56, B: 44 } },
+    { a: "cuddle all night 🐻", b: "make out in a car 🚗", stats: { A: 46, B: 54 } },
+    { a: "have a pillow fight 😆", b: "kiss under the stars ✨", stats: { A: 54, B: 46 } },
+    { a: "send a surprise selfie 📸", b: "do a love quiz 🧠", stats: { A: 58, B: 42 } },
+    { a: "watch a steamy movie 🎬", b: "share a shower 🚿", stats: { A: 57, B: 43 } },
+    { a: "give a lap dance 💃", b: "bake something sweet together 🍰", stats: { A: 58, B: 42 } },
+    { a: "take a romantic bath 🛁", b: "make out in a car 🚗", stats: { A: 52, B: 48 } },
+    { a: "take a romantic bath 🛁", b: "play with ice cubes 🧊", stats: { A: 44, B: 56 } },
+    { a: "write a love poem ✍️", b: "send flirty emojis only for a day 😜", stats: { A: 53, B: 47 } },
+    { a: "write a love poem ✍️", b: "have a flirty photo shoot 📷", stats: { A: 50, B: 50 } },
+    { a: "give a lap dance 💃", b: "play truth or dare 😈", stats: { A: 41, B: 59 } },
+    { a: "wake up to cuddles ☀️", b: "have a flirty photo shoot 📷", stats: { A: 47, B: 53 } },
+    { a: "play a strip game 🃏", b: "share a shower 🚿", stats: { A: 54, B: 46 } },
+    { a: "write a love poem ✍️", b: "write love notes 📝", stats: { A: 50, B: 50 } },
+    { a: "have a blindfolded taste test 😋", b: "write love notes 📝", stats: { A: 48, B: 52 } },
+    { a: "send a surprise selfie 📸", b: "make out in a car 🚗", stats: { A: 48, B: 52 } },
+    { a: "send a surprise selfie 📸", b: "send a voice note moan 🎧", stats: { A: 53, B: 47 } },
+    { a: "exchange steamy dares 🔥", b: "fall asleep on a video call 📱", stats: { A: 42, B: 58 } },
+    { a: "have a blindfolded taste test 😋", b: "bake something sweet together 🍰", stats: { A: 58, B: 42 } },
+    { a: "play a strip game 🃏", b: "wake up to kisses 💋", stats: { A: 58, B: 42 } },
+    { a: "have a pillow fight 😆", b: "share a shower 🚿", stats: { A: 59, B: 41 } },
+    { a: "kiss in the rain 🌧️", b: "write love notes 📝", stats: { A: 48, B: 52 } },
+    { a: "hold hands in public 👫", b: "cuddle in a blanket fort 🏕️", stats: { A: 42, B: 58 } },
+    { a: "cuddle all night 🐻", b: "fall asleep on a video call 📱", stats: { A: 57, B: 43 } },
+    { a: "make a couples playlist 🎧", b: "send flirty emojis only for a day 😜", stats: { A: 45, B: 55 } },
+    { a: "give a lap dance 💃", b: "receive a 10-minute massage 😌", stats: { A: 43, B: 57 } },
+    { a: "send a surprise selfie 📸", b: "dance in your underwear 🩲", stats: { A: 45, B: 55 } },
+    { a: "give a 10-minute massage 💆", b: "have a tickle fight 🤭", stats: { A: 52, B: 48 } },
+    { a: "kiss for 60 seconds 😘", b: "write love notes 📝", stats: { A: 60, B: 40 } },
+    { a: "make a couples playlist 🎧", b: "write love notes 📝", stats: { A: 59, B: 41 } },
+    { a: "have a pillow fight 😆", b: "do a love quiz 🧠", stats: { A: 58, B: 42 } },
+    { a: "make a couples playlist 🎧", b: "kiss under the stars ✨", stats: { A: 49, B: 51 } },
+    { a: "play a strip game 🃏", b: "cuddle in a blanket fort 🏕️", stats: { A: 54, B: 46 } },
+    { a: "hold hands in public 👫", b: "share a shower 🚿", stats: { A: 49, B: 51 } },
+    { a: "go skinny dipping 🌊", b: "make out in a car 🚗", stats: { A: 50, B: 50 } },
+    { a: "make a couples playlist 🎧", b: "make out in a car 🚗", stats: { A: 47, B: 53 } },
+    { a: "kiss in the rain 🌧️", b: "make out in a car 🚗", stats: { A: 46, B: 54 } },
+    { a: "cook dinner together 🍝", b: "do a love quiz 🧠", stats: { A: 40, B: 60 } },
+    { a: "exchange steamy dares 🔥", b: "make out in a car 🚗", stats: { A: 54, B: 46 } },
+    { a: "slow dance in the kitchen 💃", b: "play truth or dare 😈", stats: { A: 55, B: 45 } },
+    { a: "wake up to cuddles ☀️", b: "wake up to kisses 💋", stats: { A: 60, B: 40 } },
+    { a: "hold hands in public 👫", b: "send a voice note moan 🎧", stats: { A: 59, B: 41 } },
+    { a: "take a romantic bath 🛁", b: "send a voice note moan 🎧", stats: { A: 41, B: 59 } },
+    { a: "send a surprise selfie 📸", b: "kiss under the stars ✨", stats: { A: 51, B: 49 } },
+    { a: "take a romantic bath 🛁", b: "share a shower 🚿", stats: { A: 44, B: 56 } },
+    { a: "cuddle all night 🐻", b: "do a love quiz 🧠", stats: { A: 54, B: 46 } },
+    { a: "whisper flirty secrets 😏", b: "play truth or dare 😈", stats: { A: 59, B: 41 } },
+    { a: "slow dance in the kitchen 💃", b: "watch the sunset together 🌅", stats: { A: 50, B: 50 } },
+    { a: "have a blindfolded taste test 😋", b: "play with ice cubes 🧊", stats: { A: 56, B: 44 } },
+    { a: "kiss in the rain 🌧️", b: "share a shower 🚿", stats: { A: 45, B: 55 } },
+    { a: "give a lap dance 💃", b: "make out in a car 🚗", stats: { A: 47, B: 53 } },
+    { a: "cuddle all night 🐻", b: "send a voice note moan 🎧", stats: { A: 44, B: 56 } },
+    { a: "kiss in the rain 🌧️", b: "send a voice note moan 🎧", stats: { A: 45, B: 55 } },
+    { a: "hold hands in public 👫", b: "receive a 10-minute massage 😌", stats: { A: 44, B: 56 } },
+    { a: "take a romantic bath 🛁", b: "receive a 10-minute massage 😌", stats: { A: 49, B: 51 } },
+    { a: "exchange steamy dares 🔥", b: "draw each other 💖", stats: { A: 60, B: 40 } },
+    { a: "hold hands in public 👫", b: "have a flirty photo shoot 📷", stats: { A: 40, B: 60 } },
+    { a: "slow dance in the kitchen 💃", b: "cuddle in a blanket fort 🏕️", stats: { A: 54, B: 46 } },
+    { a: "make a couples playlist 🎧", b: "exchange secret fantasies 🔐", stats: { A: 44, B: 56 } },
+    { a: "make a couples playlist 🎧", b: "share a shower 🚿", stats: { A: 59, B: 41 } },
+    { a: "go skinny dipping 🌊", b: "write love notes 📝", stats: { A: 41, B: 59 } },
+    { a: "give a lap dance 💃", b: "dance in your underwear 🩲", stats: { A: 43, B: 57 } },
+    { a: "have a pillow fight 😆", b: "send flirty emojis only for a day 😜", stats: { A: 60, B: 40 } },
+    { a: "kiss for 60 seconds 😘", b: "exchange secret fantasies 🔐", stats: { A: 58, B: 42 } },
+    { a: "play a strip game 🃏", b: "send a voice note moan 🎧", stats: { A: 46, B: 54 } },
+    { a: "watch a steamy movie 🎬", b: "draw each other 💖", stats: { A: 60, B: 40 } },
+    { a: "go skinny dipping 🌊", b: "share a shower 🚿", stats: { A: 45, B: 55 } },
+    { a: "give a 10-minute massage 💆", b: "exchange secret fantasies 🔐", stats: { A: 40, B: 60 } },
+    { a: "whisper flirty secrets 😏", b: "have a flirty photo shoot 📷", stats: { A: 53, B: 47 } },
+    { a: "kiss for 60 seconds 😘", b: "dance in your underwear 🩲", stats: { A: 47, B: 53 } },
+    { a: "make a couples playlist 🎧", b: "receive a 10-minute massage 😌", stats: { A: 52, B: 48 } },
+    { a: "wake up to cuddles ☀️", b: "dance in your underwear 🩲", stats: { A: 57, B: 43 } },
+    { a: "kiss for 60 seconds 😘", b: "bake something sweet together 🍰", stats: { A: 43, B: 57 } },
+    { a: "cuddle all night 🐻", b: "play truth or dare 😈", stats: { A: 59, B: 41 } },
+    { a: "kiss in the rain 🌧️", b: "have a flirty photo shoot 📷", stats: { A: 43, B: 57 } },
+    { a: "have a pillow fight 😆", b: "bake something sweet together 🍰", stats: { A: 44, B: 56 } },
+    { a: "exchange steamy dares 🔥", b: "have a tickle fight 🤭", stats: { A: 48, B: 52 } },
+    { a: "play a strip game 🃏", b: "do a love quiz 🧠", stats: { A: 57, B: 43 } },
+    { a: "cook dinner together 🍝", b: "send flirty emojis only for a day 😜", stats: { A: 41, B: 59 } },
+    { a: "kiss for 60 seconds 😘", b: "do a love quiz 🧠", stats: { A: 58, B: 42 } },
+    { a: "go skinny dipping 🌊", b: "send a voice note moan 🎧", stats: { A: 41, B: 59 } },
+    { a: "have a pillow fight 😆", b: "make out in a car 🚗", stats: { A: 55, B: 45 } },
+    { a: "cuddle all night 🐻", b: "exchange secret fantasies 🔐", stats: { A: 59, B: 41 } },
+    { a: "wake up to cuddles ☀️", b: "have a tickle fight 🤭", stats: { A: 49, B: 51 } },
+    { a: "whisper flirty secrets 😏", b: "receive a 10-minute massage 😌", stats: { A: 41, B: 59 } },
+    { a: "whisper flirty secrets 😏", b: "share a shower 🚿", stats: { A: 54, B: 46 } },
+    { a: "cook dinner together 🍝", b: "receive a 10-minute massage 😌", stats: { A: 52, B: 48 } },
+    { a: "kiss in the rain 🌧️", b: "wake up to kisses 💋", stats: { A: 48, B: 52 } },
+    { a: "give a 10-minute massage 💆", b: "send a voice note moan 🎧", stats: { A: 48, B: 52 } },
+    { a: "whisper flirty secrets 😏", b: "cuddle in a blanket fort 🏕️", stats: { A: 45, B: 55 } },
+    { a: "give a lap dance 💃", b: "draw each other 💖", stats: { A: 57, B: 43 } },
+    { a: "wake up to cuddles ☀️", b: "fall asleep on a video call 📱", stats: { A: 52, B: 48 } },
+    { a: "cook dinner together 🍝", b: "play with ice cubes 🧊", stats: { A: 48, B: 52 } },
+    { a: "whisper flirty secrets 😏", b: "dance in your underwear 🩲", stats: { A: 41, B: 59 } },
+    { a: "slow dance in the kitchen 💃", b: "fall asleep on a video call 📱", stats: { A: 54, B: 46 } },
+    { a: "hold hands in public 👫", b: "fall asleep on a video call 📱", stats: { A: 54, B: 46 } },
+    { a: "go skinny dipping 🌊", b: "exchange secret fantasies 🔐", stats: { A: 55, B: 45 } },
+    { a: "have a pillow fight 😆", b: "write love notes 📝", stats: { A: 48, B: 52 } },
+    { a: "make a couples playlist 🎧", b: "send a voice note moan 🎧", stats: { A: 40, B: 60 } },
+    { a: "wake up to cuddles ☀️", b: "cuddle in a blanket fort 🏕️", stats: { A: 60, B: 40 } },
+    { a: "whisper flirty secrets 😏", b: "watch the sunset together 🌅", stats: { A: 50, B: 50 } },
+    { a: "write a love poem ✍️", b: "have a tickle fight 🤭", stats: { A: 58, B: 42 } },
+    { a: "cuddle all night 🐻", b: "write love notes 📝", stats: { A: 54, B: 46 } },
+    { a: "watch a steamy movie 🎬", b: "send a voice note moan 🎧", stats: { A: 58, B: 42 } },
+    { a: "cuddle all night 🐻", b: "draw each other 💖", stats: { A: 60, B: 40 } },
+    { a: "give a 10-minute massage 💆", b: "receive a 10-minute massage 😌", stats: { A: 42, B: 58 } },
+    { a: "cook dinner together 🍝", b: "fall asleep on a video call 📱", stats: { A: 42, B: 58 } },
+    { a: "send a surprise selfie 📸", b: "send flirty emojis only for a day 😜", stats: { A: 58, B: 42 } },
+    { a: "watch a steamy movie 🎬", b: "play with ice cubes 🧊", stats: { A: 56, B: 44 } },
+    { a: "whisper flirty secrets 😏", b: "kiss under the stars ✨", stats: { A: 51, B: 49 } },
+    { a: "have a blindfolded taste test 😋", b: "draw each other 💖", stats: { A: 58, B: 42 } },
+    { a: "take a romantic bath 🛁", b: "exchange secret fantasies 🔐", stats: { A: 42, B: 58 } },
+    { a: "cook dinner together 🍝", b: "dance in your underwear 🩲", stats: { A: 56, B: 44 } },
+    { a: "cook dinner together 🍝", b: "send a voice note moan 🎧", stats: { A: 43, B: 57 } },
+    { a: "give a lap dance 💃", b: "exchange secret fantasies 🔐", stats: { A: 60, B: 40 } },
+    { a: "watch a steamy movie 🎬", b: "make out in a car 🚗", stats: { A: 51, B: 49 } },
+    { a: "slow dance in the kitchen 💃", b: "bake something sweet together 🍰", stats: { A: 43, B: 57 } },
+    { a: "kiss for 60 seconds 😘", b: "play with ice cubes 🧊", stats: { A: 45, B: 55 } },
+    { a: "send a surprise selfie 📸", b: "exchange secret fantasies 🔐", stats: { A: 49, B: 51 } },
+    { a: "wake up to cuddles ☀️", b: "send flirty emojis only for a day 😜", stats: { A: 49, B: 51 } },
+    { a: "cuddle all night 🐻", b: "receive a 10-minute massage 😌", stats: { A: 48, B: 52 } },
+    { a: "kiss in the rain 🌧️", b: "watch the sunset together 🌅", stats: { A: 46, B: 54 } },
+    { a: "wake up to cuddles ☀️", b: "watch the sunset together 🌅", stats: { A: 43, B: 57 } },
+    { a: "take a romantic bath 🛁", b: "kiss under the stars ✨", stats: { A: 48, B: 52 } },
+    { a: "take a romantic bath 🛁", b: "cuddle in a blanket fort 🏕️", stats: { A: 42, B: 58 } },
+    { a: "play a strip game 🃏", b: "exchange secret fantasies 🔐", stats: { A: 54, B: 46 } },
+    { a: "wake up to cuddles ☀️", b: "do a love quiz 🧠", stats: { A: 42, B: 58 } },
+    { a: "send a surprise selfie 📸", b: "draw each other 💖", stats: { A: 41, B: 59 } },
+    { a: "go skinny dipping 🌊", b: "kiss under the stars ✨", stats: { A: 46, B: 54 } },
+    { a: "take a romantic bath 🛁", b: "have a flirty photo shoot 📷", stats: { A: 52, B: 48 } },
+    { a: "go skinny dipping 🌊", b: "dance in your underwear 🩲", stats: { A: 47, B: 53 } },
+    { a: "exchange steamy dares 🔥", b: "dance in your underwear 🩲", stats: { A: 55, B: 45 } },
+    { a: "hold hands in public 👫", b: "make out in a car 🚗", stats: { A: 60, B: 40 } },
+    { a: "exchange steamy dares 🔥", b: "share a shower 🚿", stats: { A: 53, B: 47 } },
+    { a: "kiss for 60 seconds 😘", b: "kiss under the stars ✨", stats: { A: 47, B: 53 } },
+    { a: "cuddle all night 🐻", b: "cuddle in a blanket fort 🏕️", stats: { A: 52, B: 48 } },
+    { a: "have a pillow fight 😆", b: "send a voice note moan 🎧", stats: { A: 59, B: 41 } },
+    { a: "send a surprise selfie 📸", b: "wake up to kisses 💋", stats: { A: 43, B: 57 } },
+    { a: "send a surprise selfie 📸", b: "watch the sunset together 🌅", stats: { A: 49, B: 51 } },
+    { a: "send a surprise selfie 📸", b: "play with ice cubes 🧊", stats: { A: 47, B: 53 } },
+    { a: "exchange steamy dares 🔥", b: "play truth or dare 😈", stats: { A: 47, B: 53 } },
+    { a: "exchange steamy dares 🔥", b: "kiss under the stars ✨", stats: { A: 43, B: 57 } },
+    { a: "cuddle all night 🐻", b: "share a shower 🚿", stats: { A: 52, B: 48 } },
+    { a: "write a love poem ✍️", b: "play truth or dare 😈", stats: { A: 42, B: 58 } },
+    { a: "watch a steamy movie 🎬", b: "have a flirty photo shoot 📷", stats: { A: 43, B: 57 } },
+    { a: "hold hands in public 👫", b: "play with ice cubes 🧊", stats: { A: 43, B: 57 } },
+    { a: "exchange steamy dares 🔥", b: "do a love quiz 🧠", stats: { A: 43, B: 57 } },
+    { a: "play a strip game 🃏", b: "kiss under the stars ✨", stats: { A: 53, B: 47 } },
+    { a: "make a couples playlist 🎧", b: "have a tickle fight 🤭", stats: { A: 48, B: 52 } },
+    { a: "send a surprise selfie 📸", b: "receive a 10-minute massage 😌", stats: { A: 44, B: 56 } },
+    { a: "exchange steamy dares 🔥", b: "exchange secret fantasies 🔐", stats: { A: 42, B: 58 } },
+    { a: "cook dinner together 🍝", b: "have a tickle fight 🤭", stats: { A: 58, B: 42 } },
+    { a: "slow dance in the kitchen 💃", b: "have a tickle fight 🤭", stats: { A: 50, B: 50 } },
+    { a: "make a couples playlist 🎧", b: "fall asleep on a video call 📱", stats: { A: 47, B: 53 } },
+    { a: "send a surprise selfie 📸", b: "share a shower 🚿", stats: { A: 56, B: 44 } },
+    { a: "have a blindfolded taste test 😋", b: "exchange secret fantasies 🔐", stats: { A: 42, B: 58 } },
+    { a: "kiss in the rain 🌧️", b: "play truth or dare 😈", stats: { A: 48, B: 52 } },
+    { a: "slow dance in the kitchen 💃", b: "play with ice cubes 🧊", stats: { A: 53, B: 47 } },
+    { a: "hold hands in public 👫", b: "write love notes 📝", stats: { A: 43, B: 57 } },
+    { a: "play a strip game 🃏", b: "have a tickle fight 🤭", stats: { A: 44, B: 56 } },
+    { a: "go skinny dipping 🌊", b: "do a love quiz 🧠", stats: { A: 43, B: 57 } },
+    { a: "have a blindfolded taste test 😋", b: "fall asleep on a video call 📱", stats: { A: 49, B: 51 } },
+    { a: "whisper flirty secrets 😏", b: "wake up to kisses 💋", stats: { A: 52, B: 48 } },
+    { a: "hold hands in public 👫", b: "bake something sweet together 🍰", stats: { A: 44, B: 56 } },
+    { a: "have a pillow fight 😆", b: "receive a 10-minute massage 😌", stats: { A: 47, B: 53 } },
+    { a: "have a blindfolded taste test 😋", b: "watch the sunset together 🌅", stats: { A: 49, B: 51 } },
+    { a: "have a blindfolded taste test 😋", b: "share a shower 🚿", stats: { A: 46, B: 54 } },
+    { a: "go skinny dipping 🌊", b: "receive a 10-minute massage 😌", stats: { A: 48, B: 52 } },
+    { a: "play a strip game 🃏", b: "send flirty emojis only for a day 😜", stats: { A: 45, B: 55 } },
+    { a: "go skinny dipping 🌊", b: "play truth or dare 😈", stats: { A: 47, B: 53 } },
+    { a: "take a romantic bath 🛁", b: "watch the sunset together 🌅", stats: { A: 58, B: 42 } },
+    { a: "play a strip game 🃏", b: "watch the sunset together 🌅", stats: { A: 53, B: 47 } },
+    { a: "make a couples playlist 🎧", b: "cuddle in a blanket fort 🏕️", stats: { A: 60, B: 40 } }
+  ];
+
+  // ============================================================
+  //  GAME LOGIC
+  // ============================================================
+
+  let currentIndex = 0;
+  let currentQuestion = null;
+  let userChoice = null; // 'A' or 'B'
+  let history = [];
+  let shuffled = [];
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function initGame() {
+    shuffled = shuffleArray([...questions]);
+    currentIndex = 0;
+    userChoice = null;
+    history = [];
+    showQuestion();
+  }
+
+  function showQuestion() {
+    if (currentIndex >= shuffled.length) {
+      // loop back
+      shuffled = shuffleArray([...questions]);
+      currentIndex = 0;
+    }
+    currentQuestion = shuffled[currentIndex];
+    const q = currentQuestion;
+    document.getElementById('questionDisplay').textContent = 'Would you rather...';
+    document.getElementById('optionA').textContent = q.a;
+    document.getElementById('optionB').textContent = q.b;
+    document.getElementById('statA').textContent = q.stats.A + '%';
+    document.getElementById('statB').textContent = q.stats.B + '%';
+    document.getElementById('counterDisplay').textContent = `Question ${currentIndex + 1} / ${shuffled.length}`;
+    document.getElementById('moodBadge').textContent = '❤️ choose your vibe';
+    // reset selection style
+    document.getElementById('optionA').className = 'option-btn';
+    document.getElementById('optionB').className = 'option-btn';
+    userChoice = null;
+  }
+
+  function selectOption(choice) {
+    if (userChoice) return; // already selected
+    userChoice = choice;
+    const btnA = document.getElementById('optionA');
+    const btnB = document.getElementById('optionB');
+    btnA.className = 'option-btn';
+    btnB.className = 'option-btn';
+    if (choice === 'A') {
+      btnA.classList.add('selected-a');
+      btnB.classList.add('selected-b'); // subtle contrast
+    } else {
+      btnB.classList.add('selected-b');
+      btnA.classList.add('selected-a');
+    }
+    // log history
+    history.push({ question: currentQuestion, choice: choice });
+    // update mood
+    document.getElementById('moodBadge').textContent = choice === 'A' ? '💖 you chose A' : '💜 you chose B';
+  }
+
+  function nextQuestion() {
+    currentIndex++;
+    showQuestion();
+  }
+
+  function surpriseMe() {
+    // pick a random question from the list
+    const randomIdx = Math.floor(Math.random() * shuffled.length);
+    currentIndex = randomIdx;
+    userChoice = null;
+    showQuestion();
+    document.getElementById('moodBadge').textContent = '🎲 surprise!';
+  }
+
+  function resetGame() {
+    initGame();
+    document.getElementById('moodBadge').textContent = '🔄 fresh start';
+  }
+
+  // Event listeners
+  document.getElementById('optionA').addEventListener('click', () => selectOption('A'));
+  document.getElementById('optionB').addEventListener('click', () => selectOption('B'));
+  document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+  document.getElementById('surpriseBtn').addEventListener('click', surpriseMe);
+  document.getElementById('resetBtn').addEventListener('click', resetGame);
+
+  // Start
+  window.onload = initGame;
+</script>
+</body>
+</html>

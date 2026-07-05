@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>GameZone · Refreshed</title>
+  <!-- Font & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: #f8f0f5;
+      color: #1e1e2a;
+      scroll-behavior: smooth;
+      padding-top: 70px;
+    }
+
+    /* ----- NAVBAR (mobile-first) ----- */
+    .navbar {
+      background: rgba(30, 30, 46, 0.92);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 0.7rem 1.2rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 1.9rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff6b9d, #ff2e7d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: none;
+      list-style: none;
+      gap: 2.2rem;
+    }
+
+    .nav-links a {
+      color: #eee;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 0.4rem 0;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #ff6b9d;
+      border-bottom-color: #ff6b9d;
+    }
+
+    /* hamburger */
+    .nav-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px 0;
+    }
+
+    .nav-toggle .bar {
+      width: 28px;
+      height: 3px;
+      background: white;
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+
+    .mobile-nav {
+      display: none;
+      background: rgba(20, 20, 35, 0.98);
+      backdrop-filter: blur(10px);
+      position: absolute;
+      top: 68px;
+      right: 0;
+      width: 75%;
+      max-width: 280px;
+      padding: 1.6rem 1.2rem;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      transition: 0.25s ease;
+    }
+
+    .mobile-nav.active {
+      display: block;
+    }
+
+    .mobile-nav a {
+      display: block;
+      color: #f0f0f0;
+      text-decoration: none;
+      padding: 0.8rem 0.2rem;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .mobile-nav a:last-child { border-bottom: none; }
+
+    @media (min-width: 820px) {
+      .nav-links { display: flex; }
+      .nav-toggle { display: none; }
+      .mobile-nav { display: none !important; }
+    }
+
+    /* ----- sections ----- */
+    section {
+      padding: 3rem 1.2rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #d43f6b, #b82e5a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-sub {
+      font-size: 1.15rem;
+      color: #4a3f47;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .game-card {
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(4px);
+      border-radius: 32px;
+      padding: 1.8rem 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .game-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.08); }
+
+    .btn {
+      background: #ff4d7a;
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 60px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 4px 10px rgba(255, 45, 85, 0.2);
+    }
+
+    .btn:hover { background: #e63e6a; transform: scale(0.97); }
+
+    /* kiss & dare panel (floating) */
+    .kd-panel {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 320px;
+      height: 100%;
+      background: #fff5f9;
+      padding: 2rem 1.5rem;
+      box-shadow: 6px 0 25px rgba(0,0,0,0.1);
+      z-index: 999;
+      transition: left 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+    }
+
+    .kd-panel.open { left: 0; }
+
+    .kd-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #b02b50;
+      margin-bottom: 2rem;
+    }
+
+    .kd-close-btn {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: #b02b50;
+      cursor: pointer;
+    }
+
+    .kd-section { margin-bottom: 2rem; }
+    .kd-section select { width: 100%; padding: 0.7rem; border-radius: 40px; border: 1px solid #f0b8cc; margin: 0.5rem 0; }
+
+    .kd-toggle-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      background: #ff4d7a;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 60px;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(255, 45, 85, 0.35);
+      z-index: 998;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* truth or dare wheel */
+    .circle-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .circle {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 5px solid #ff6b9d;
+      transition: transform 3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .circle-image {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .player-input {
+      padding: 0.7rem 1.2rem;
+      border-radius: 60px;
+      border: 1px solid #ddd;
+      width: 100%;
+      max-width: 320px;
+      margin: 0.5rem 0;
+    }
+
+    /* romantic spin web component fallback */
+    romantic-spin {
+      display: block;
+      margin: 1.5rem 0;
+    }
+
+    /* footer */
+    footer {
+      background: #1a1a2c;
+      color: #ccc;
+      padding: 2.5rem 1.2rem;
+      margin-top: 3rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-grid h4 { color: white; margin-bottom: 1rem; }
+    .footer-grid ul { list-style: none; }
+    .footer-grid a { color: #aaa; text-decoration: none; line-height: 2; }
+    .footer-grid a:hover { color: #ff6b9d; }
+
+    /* misc */
+    .flex-center { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; }
+    .mt-2 { margin-top: 2rem; }
+    .text-center { text-align: center; }
+
+    /* responsive fine-tune */
+    @media (max-width: 480px) {
+      .section-title { font-size: 2rem; }
+      .circle { width: 180px; height: 180px; }
+      .kd-panel { width: 90%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== NAVBAR ====== -->
+<nav class="navbar">
+  <div class="navbar-container">
+    <a href="#" class="logo">GameZone</a>
+    <ul class="nav-links">
+      <li><a href="#friends-games">Naughty Games</a></li>
+      <li><a href="#new-arrivals">Romantic Wheel</a></li>
+      <li><a href="#featured">Friends</a></li>
+      <li><a href="shop.html">Shop</a></li>
+    </ul>
+    <div class="nav-toggle" id="nav-toggle">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#friends-games">💋 Naughty Games</a>
+    <a href="#new-arrivals">🎡 Romantic Wheel</a>
+    <a href="#featured">🎲 Friends Games</a>
+    <a href="shop.html">🛍️ Shop</a>
+    <a href="#about">About</a>
+  </div>
+</nav>
+
+<!-- ====== KISS & DARE PANEL ====== -->
+<div class="kd-panel" id="kd-panel">
+  <div class="kd-header">
+    <span>💋 Kiss & Dare</span>
+    <button class="kd-close-btn" onclick="kdClosePanel()">✕</button>
+  </div>
+  <div class="kd-section">
+    <label>Kiss type</label>
+    <select id="kd-kiss-type">
+      <option value="romantic">Romantic</option><option value="playful">Playful</option><option value="wild">Wild</option>
+    </select>
+    <button class="btn" style="width:100%;" onclick="kdShowKiss()">💋 Submit Kiss</button>
+  </div>
+  <div class="kd-section">
+    <label>Dare level</label>
+    <select id="kd-dare-level">
+      <option value="light">Light</option><option value="bold">Bold</option><option value="crazy">Crazy</option>
+    </select>
+    <button class="btn" style="width:100%;" onclick="kdShowDare()">🔥 Submit Dare</button>
+  </div>
+  <div class="kd-result" id="kd-result" style="background:white;padding:1rem;border-radius:40px;font-weight:600;">🎲 Try a kiss or dare</div>
+</div>
+<button class="kd-toggle-btn" onclick="kdTogglePanel()"><i class="fas fa-heart" style="margin-right:6px;"></i> Kiss & Dare</button>
+
+<!-- ====== SECTION : Naughty Games ====== -->
+<section id="friends-games">
+  <h2 class="section-title">💞 Romantic & Intimate Games</h2>
+  <p class="section-sub">Sparks fly with playful and intimate games, perfect for couples, besties, or anyone ready for fun.</p>
+
+  <div class="card-grid">
+    <!-- Truth or Dare -->
+    <div class="game-card">
+      <h3>🎲 Truth or Dare</h3>
+      <input type="text" id="contestants" class="player-input" placeholder="phill, you, him, her">
+      <button class="btn" onclick="setContestants()">Set Contestants</button>
+      <div class="circle-wrapper">
+        <div class="circle" id="spin-circle">
+          <img src="https://play-lh.googleusercontent.com/4Kp0-pJ_rTEw5kPawuitRgG0R5sGagHJkqLvRTXRoh7rpM7qv08E8wXEPvw2a_BkQ9vM" alt="wheel" class="circle-image">
+        </div>
+      </div>
+      <button class="btn" onclick="spinCircle()">Spin the Circle</button>
+      <p class="outcome" id="outcome" style="margin-top:1rem;font-weight:600;">Ready to spin</p>
+    </div>
+
+    <!-- Never or Ever (embedded) -->
+    <div class="game-card">
+      <h3>🎉 Never or Ever</h3>
+      <div id="ne-prompt-display" style="min-height:70px;font-weight:500;margin:1rem 0;">Click below to begin!</div>
+      <button class="btn" id="ne-generate-btn">🔄 Show Prompt</button>
+      <p style="font-size:0.8rem;margin-top:0.5rem;color:#777;">honest answers only 😏</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SECTION : Romantic Wheel ====== -->
+<section id="new-arrivals">
+  <h2 class="section-title">🎡 Romantic Wheel</h2>
+  <p class="section-sub">Turn down the lights, turn up the connection</p>
+  <div class="game-card" style="max-width:600px;margin:0 auto;">
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;">
+      <input id="partner1" type="text" placeholder="Partner 1" style="padding:0.6rem 1rem;border-radius:40px;border:1px solid #ddd;flex:1;min-width:120px;">
+      <input id="partner2" type="text" placeholder="Partner 2" style="padding:0.6rem 1rem;border-radius:40px;border:1px solid #ddd;flex:1;min-width:120px;">
+      <button class="btn" onclick="startRomanticGame()">💖 Start</button>
+    </div>
+    <div id="welcomeMessage" style="margin:1rem 0;font-weight:600;display:none;"></div>
+    <div id="wheel-container" style="display:none;margin:1.5rem 0;">
+      <div id="wheel" style="width:200px;height:200px;border-radius:50%;margin:0 auto;border:6px solid white;background:conic-gradient(#ffd6d6 0% 25%, #ffe2e2 25% 50%, #ffc7c7 50% 75%, #ffeaea 75% 100%);transition: transform 4s ease-out;"></div>
+      <button class="btn" onclick="spinRomanticWheel()" style="margin-top:1rem;">🎡 Spin</button>
+    </div>
+    <div id="resultMessage" style="font-weight:600;margin-top:1rem;display:none;"></div>
+  </div>
+</section>
+
+<!-- ====== SECTION : Featured / Friends Games ====== -->
+<section id="featured">
+  <h2 class="section-title">👫 Friends & Party Games</h2>
+  <p class="section-sub">Featured games getting all the attention this month!</p>
+  <div class="card-grid">
+    <!-- PairUp -->
+    <div class="game-card">
+      <h3>💞 PairUp – Duo Challenge</h3>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin:0.5rem 0;">
+        <select id="vibe" style="padding:0.5rem;border-radius:40px;border:1px solid #ddd;">
+          <option value="default">Default</option><option value="romance">City of Love</option><option value="ocean">Tropical</option><option value="chill">Chill</option>
+        </select>
+        <button class="btn" onclick="launchPairUp()">Launch</button>
+      </div>
+      <div id="pairup-board" style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem;max-width:320px;margin:1rem auto;"></div>
+      <div id="pairup-clock" style="font-weight:600;">⏱️ 0s</div>
+    </div>
+
+    <!-- Live Stats (mini) -->
+    <div class="game-card">
+      <h3>📊 Live Stats</h3>
+      <div style="display:flex;justify-content:space-around;flex-wrap:wrap;">
+        <div><span style="font-weight:700;">👥</span> <span class="stat-count" data-target="34700">0</span></div>
+        <div><span style="font-weight:700;">🌐</span> <span class="stat-count" data-target="128000">0</span></div>
+        <div><span style="font-weight:700;">🎮</span> <span class="stat-count" data-target="59000">0</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SHOP placeholder ====== -->
+<section id="shop" style="background:linear-gradient(145deg,#fce4ec,#f8e8ef);border-radius:60px 60px 0 0;padding:3rem 1.5rem;">
+  <h2 class="section-title">🛍️ Game Shop</h2>
+  <p class="section-sub">Coming soon – exclusive decks & accessories.</p>
+  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
+    <div style="background:white;padding:1.5rem;border-radius:40px;width:180px;box-shadow:0 4px 12px rgba(0,0,0,0.04);">🔥 Truth or Dare deck</div>
+    <div style="background:white;padding:1.5rem;border-radius:40px;width:180px;box-shadow:0 4px 12px rgba(0,0,0,0.04);">💋 Romantic dice set</div>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="footer-grid">
+    <div><h4>GameZone</h4><p style="color:#888;">playful connections</p></div>
+    <div><h4>Quick</h4><ul><li><a href="#friends-games">Naughty</a></li><li><a href="#new-arrivals">Romantic</a></li><li><a href="#featured">Friends</a></li></ul></div>
+    <div><h4>Contact</h4><ul><li><a href="#">spencemiles0@gmail.com</a></li><li><a href="#">+254 790 617 211</a></li></ul></div>
+    <div><h4>Social</h4><div style="display:flex;gap:1rem;font-size:1.6rem;color:#ff6b9d;"><i class="fab fa-instagram"></i><i class="fab fa-twitter"></i><i class="fab fa-youtube"></i></div></div>
+  </div>
+  <div style="text-align:center;margin-top:2.5rem;border-top:1px solid #333;padding-top:1.5rem;color:#666;">© 2025 GameZone · developed by Phill</div>
+</footer>
+
+<!-- ============================================================ -->
+<!-- JAVASCRIPT : All upgraded features -->
+<script>
+  // -------- NAV TOGGLE --------
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('nav-toggle');
+    const mobileNav = document.getElementById('mobileNav');
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      mobileNav.classList.toggle('active');
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.navbar')) mobileNav.classList.remove('active');
+    });
+  });
+
+  // -------- KISS & DARE PANEL --------
+  function kdTogglePanel() {
+    document.getElementById('kd-panel').classList.toggle('open');
+  }
+  function kdClosePanel() {
+    document.getElementById('kd-panel').classList.remove('open');
+  }
+  const kdKissOptions = {
+    romantic: ["A kiss on the forehead", "A soft kiss at sunset", "A morning kiss on the cheek", "A gentle whisper and kiss", "A kiss while holding hands"],
+    playful: ["A peck on the nose", "An upside-down kiss", "A ticklish kiss", "A kiss while giggling", "A sneak attack kiss"],
+    wild: ["A deep passionate kiss", "A surprise wall kiss", "A kiss on the neck", "A heated kitchen kiss", "A spontaneous makeout"]
+  };
+  const kdDareOptions = {
+    light: ["Compliment your partner seductively", "Hold hands for 1 minute", "Do a shy smile kiss", "Draw a heart on their palm"],
+    bold: ["Dance sensually for 30 seconds", "Blindfold and kiss your partner", "Touch their cheek slowly", "Kiss with eyes closed"],
+    crazy: ["Give a striptease (keep it playful)", "Lick something sweet off them", "Let them tie your hands for 1 minute", "Seduce them with a whisper"]
+  };
+  function kdShowKiss() {
+    const type = document.getElementById('kd-kiss-type').value;
+    const list = kdKissOptions[type] || kdKissOptions.romantic;
+    document.getElementById('kd-result').textContent = '💋 ' + list[Math.floor(Math.random() * list.length)];
+  }
+  function kdShowDare() {
+    const level = document.getElementById('kd-dare-level').value;
+    const list = kdDareOptions[level] || kdDareOptions.light;
+    document.getElementById('kd-result').textContent = '🔥 ' + list[Math.floor(Math.random() * list.length)];
+  }
+
+  // -------- TRUTH OR DARE (spin) --------
+  let contestants = [], totalRotation = 0;
+  function setContestants() {
+    const raw = document.getElementById('contestants').value.trim();
+    if (raw) { contestants = raw.split(',').map(s => s.trim()).filter(Boolean); document.getElementById('outcome').textContent = '✅ Contestants set!'; }
+    else alert('Enter names separated by commas');
+  }
+  function spinCircle() {
+    if (!contestants.length) { alert('Set contestants first'); return; }
+    const el = document.getElementById('spin-circle');
+    const deg = 3600 + Math.floor(Math.random() * 360);
+    totalRotation += deg;
+    el.style.transform = `rotate(${totalRotation}deg)`;
+    setTimeout(() => {
+      const player = contestants[Math.floor(Math.random() * contestants.length)];
+      const action = Math.random() < 0.5 ? 'Truth' : 'Dare';
+      const q = action === 'Truth' ? ['What\'s your secret?','Most embarrassing moment?','Ever lied in this game?'] : ['Sing a song','Do a silly dance','Lick your elbow'];
+      document.getElementById('outcome').textContent = `${player} → ${action}: ${q[Math.floor(Math.random()*q.length)]}`;
+    }, 3000);
+  }
+
+  // -------- NEVER OR EVER (standalone) --------
+  const neverEverPrompts = [
+    "Never have I ever eaten something from the floor after the 5-second rule.",
+    "I have danced in the rain and loved it.",
+    "Never have I ever pranked my sibling and denied it.",
+    "I have stayed up all night binge-watching a series.",
+    "Never have I ever written a love letter.",
+    "I have had a crush on someone at work or school.",
+    "Never have I ever fallen in love at first sight.",
+    "I have planned a surprise date for someone special.",
+    "Never have I ever had a secret fantasy I never told anyone.",
+    "I have cuddled with someone all night.",
+    "Never have I ever kissed someone unexpectedly.",
+    "I have flirted with someone just for fun.",
+    "Never have I ever been turned on during a Zoom call 😳",
+    "I have shared a bed but didn’t sleep much... 😏"
+  ];
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('ne-generate-btn');
+    const display = document.getElementById('ne-prompt-display');
+    if (btn && display) {
+      btn.addEventListener('click', () => {
+        const prompt = neverEverPrompts[Math.floor(Math.random() * neverEverPrompts.length)];
+        display.textContent = prompt;
+        display.style.opacity = 0.7;
+        setTimeout(() => display.style.opacity = 1, 50);
+      });
+    }
+  });
+
+  // -------- ROMANTIC WHEEL --------
+  let romanticActions = ["Give a hug", "Say I love you", "Compliment your partner", "Hold hands for 1 minute", "Share a sweet secret", "Do a funny dance", "Whisper something romantic", "Look into each other's eyes for 30 seconds", "Give a forehead kiss", "Write a love note", "Give a back massage", "Share your favorite memory", "Sing a love song", "Slow dance together"];
+  let currentDegreeWheel = 0;
+  function startRomanticGame() {
+    const p1 = document.getElementById('partner1').value.trim(), p2 = document.getElementById('partner2').value.trim();
+    if (!p1 || !p2) { alert('Enter both names'); return; }
+    document.getElementById('welcomeMessage').style.display = 'block';
+    document.getElementById('welcomeMessage').textContent = `✨ ${p1} & ${p2}, let's get romantic!`;
+    document.getElementById('wheel-container').style.display = 'block';
+    document.getElementById('resultMessage').style.display = 'none';
+  }
+  function spinRomanticWheel() {
+    const wheel = document.getElementById('wheel');
+    const deg = 1440 + Math.floor(Math.random() * 360) + 1800;
+    currentDegreeWheel += deg;
+    wheel.style.transform = `rotate(${currentDegreeWheel}deg)`;
+    setTimeout(() => {
+      const msg = romanticActions[Math.floor(Math.random() * romanticActions.length)];
+      document.getElementById('resultMessage').style.display = 'block';
+      document.getElementById('resultMessage').textContent = '💖 ' + msg;
+    }, 4000);
+  }
+
+  // -------- PAIRUP (duo challenge) --------
+  const vibeIcons = {
+    default: ['💖','💌','💋','🌹','😘','🏱','🧸','👩‍❤️‍👨'],
+    romance: ['🗼','🥐','🍷','🧁','🎨','🚲','💋','💌'],
+    ocean: ['🌴','🍹','👙','☀️','🏖️','🕶️','🏄‍♀️','💦'],
+    chill: ['🎬','🍕','📺','🍿','🛋️','💤','🎷','❤️']
+  };
+  let pairTimer, pairSeconds = 0, pairOpen = [], pairScore = 0, pairBoard = [];
+  function launchPairUp() {
+    const board = document.getElementById('pairup-board');
+    board.innerHTML = '';
+    pairOpen = []; pairScore = 0; pairSeconds = 0; clearInterval(pairTimer);
+    document.getElementById('pairup-clock').textContent = '⏱️ 0s';
+    const vibe = document.getElementById('vibe').value;
+    const icons = vibeIcons[vibe] || vibeIcons.default;
+    let deck = [...icons, ...icons];
+    for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [deck[i],deck[j]]=[deck[j],deck[i]]; }
+    pairBoard = deck;
+    deck.forEach((symbol, idx) => {
+      const tile = document.createElement('div');
+      tile.style.cssText = 'background:#ffc1e3;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:2rem;aspect-ratio:1/1;cursor:pointer;transition:0.2s;';
+      tile.dataset.symbol = symbol;
+      tile.dataset.index = idx;
+      tile.addEventListener('click', () => pairReveal(tile));
+      board.appendChild(tile);
+    });
+    pairTimer = setInterval(() => { pairSeconds++; document.getElementById('pairup-clock').textContent = `⏱️ ${pairSeconds}s`; }, 1000);
+  }
+  function pairReveal(tile) {
+    if (tile.classList.contains('paired') || pairOpen.includes(tile)) return;
+    tile.textContent = tile.dataset.symbol;
+    tile.style.background = '#ff8aae';
+    pairOpen.push(tile);
+    if (pairOpen.length === 2) {
+      const [a,b] = pairOpen;
+      if (a.dataset.symbol === b.dataset.symbol) {
+        a.classList.add('paired'); b.classList.add('paired'); pairScore += 2;
+        a.style.background = '#ff4d7a'; b.style.background = '#ff4d7a';
+        if (pairScore === 16) clearInterval(pairTimer);
+        pairOpen = [];
+      } else {
+        setTimeout(() => {
+          a.textContent = ''; b.textContent = ''; a.style.background = '#ffc1e3'; b.style.background = '#ffc1e3';
+          pairOpen = [];
+        }, 700);
+      }
+    }
+  }
+
+  // -------- LIVE STATS COUNTER --------
+  document.querySelectorAll('.stat-count').forEach(el => {
+    const target = +el.dataset.target;
+    let current = 0;
+    const step = Math.ceil(target / 40);
+    const update = () => {
+      current += step;
+      if (current < target) { el.textContent = current.toLocaleString(); requestAnimationFrame(update); }
+      else el.textContent = target.toLocaleString();
+    };
+    update();
+  });
+
+  // -------- CLOSE PANEL ON OUTSIDE CLICK --------
+  document.addEventListener('click', (e) => {
+    const panel = document.getElementById('kd-panel');
+    const toggle = document.querySelector('.kd-toggle-btn');
+    if (!panel.contains(e.target) && !toggle.contains(e.target) && panel.classList.contains('open')) {
+      panel.classList.remove('open');
+    }
+  });
+</script>
+</body>
+</html>

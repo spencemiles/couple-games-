@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flirty Fun Zone</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #ffccd5, #ffe6cc);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .fun-arena {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 25px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      text-align: center;
+      max-width: 420px;
+    }
+    h1 {
+      color: #e91e63;
+    }
+    .action-btn {
+      background: #ff4081;
+      border: none;
+      padding: 1rem 2rem;
+      margin: 1rem;
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .action-btn:hover {
+      background: #c2185b;
+    }
+    #task-display {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #444;
+    }
+    select {
+      margin-top: 1rem;
+      padding: 0.6rem;
+      border-radius: 10px;
+      border: 1px solid #bbb;
+    }
+  </style>
+</head>
+<body>
+  <div class="fun-arena">
+    <h1>Flirty Fun Zone</h1>
+    <p>Choose your vibe:</p>
+    <button class="action-btn" onclick="launchSmooch()">Smooch</button>
+    <button class="action-btn" onclick="launchChallenge()">Challenge</button>
+
+    <div id="smooch-pick" style="display: none;">
+      <p>Pick your kiss style:</p>
+      <select id="smoochType">
+        <option value="gentle">Gentle</option>
+        <option value="intense">Intense</option>
+        <option value="cute">Cute Peck</option>
+        <option value="nape">Neck Kiss</option>
+        <option value="deep">Deep French</option>
+        <option value="random">Random Smooch</option>
+      </select>
+      <button class="action-btn" onclick="revealSmooch()">Go!</button>
+    </div>
+
+    <div id="challenge-pick" style="display: none;">
+      <p>Pick challenge level:</p>
+      <select id="challengeLevel">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="bold">Bold</option>
+        <option value="heated">Heated</option>
+      </select>
+      <button class="action-btn" onclick="revealChallenge()">Go!</button>
+    </div>
+
+    <div id="task-display"></div>
+  </div>
+
+  <script>
+    const smoochList = {
+        gentle: [
+          "Plant a gentle, slow kiss on the lips and smile softly.",
+          "Kiss their forehead while brushing their hair back.",
+          "Kiss their hand like a royal.",
+          "Press your lips gently against theirs and hold still.",
+          "Kiss their cheek slowly and hold their face.",
+          "Kiss their eyelids while they close their eyes.",
+          "Deliver a butterfly kiss using your eyelashes.",
+          "Kiss their shoulder while hugging.",
+          "Kiss their palm and intertwine fingers.",
+          "Kiss their temple with eyes closed.",
+          "Brush their lips with yours before a full kiss.",
+          "Kiss the tip of their nose and whisper 'I love you.'",
+          "Leave a kiss on their wrist as you hold it.",
+          "Kiss their knee while they're sitting.",
+          "Kiss them under soft moonlight.",
+          "Lay a kiss on their chest as you cuddle.",
+          "Kiss their collarbone slowly.",
+          "Kiss their ear lobe and breathe lightly.",
+          "Kiss their closed eyelids one by one.",
+          "Kiss their lips gently, then look into their eyes.",
+          "Kiss the space between their fingers.",
+          "Kiss their ankle while massaging their foot.",
+          "Plant a gentle kiss on their back while cuddling.",
+          "Place a kiss over their heart.",
+          "Kiss their spine with slow intention.",
+          "Kiss their hair softly and inhale the scent.",
+          "Kiss their belly softly and lovingly.",
+          "Kiss their toes gently while holding their feet.",
+          "Kiss the side of their ribcage.",
+          "Kiss their lower back while holding their hips.",
+          "Kiss their neck lightly and pull away smiling.",
+          "Kiss them in slow motion and breathe together.",
+          "Kiss their lip corners one at a time.",
+          "Kiss their fingertips like they're precious.",
+          "Lay your lips on their pulse and feel it.",
+          "Kiss them with a soft hum.",
+          "Kiss their shoulder blade and rest your head.",
+          "Kiss their lips and hum a gentle song.",
+          "Kiss their lips while swaying in a hug.",
+          "Kiss their chin gently.",
+          "Kiss their cheeks while cupping both sides.",
+          "Kiss them as they fall asleep.",
+          "Kiss their lips and whisper a secret.",
+          "Kiss their eyelids as a goodnight.",
+          "Kiss them slowly on a rainy day.",
+          "Kiss their hand and say thank you.",
+          "Kiss their lips with tearful emotion.",
+          "Kiss their face after a long hug.",
+          "Kiss their forehead when they least expect it.",
+          "Kiss them softly and let the silence speak."
+        ],
+      
+        intense: [
+          "Deliver a long, fiery kiss with passion.",
+          "Kiss their neck while holding their waist tightly.",
+          "Push them gently against a wall and kiss them hard.",
+          "Hold their face and kiss them breathless.",
+          "Kiss them while running your fingers through their hair.",
+          "Lock eyes and go in for a sudden, fierce kiss.",
+          "Grip their hips and kiss deeply.",
+          "Kiss them while pulling them closer with urgency.",
+          "Kiss them like it’s the last time.",
+          "Trail kisses down their jawline with heat."
+        ],
+      
+        cute: [
+          "Give a quick, playful peck and giggle.",
+          "Kiss their nose and boop it with your finger.",
+          "Make a kissy face until they cave in.",
+          "Blow them a kiss from across the room.",
+          "Kiss them while smiling cheek to cheek.",
+          "Kiss their cheek when they least expect it.",
+          "Kiss them and say 'Mine!'",
+          "Kiss them and run away laughing.",
+          "Kiss their forehead and say 'cutie!'",
+          "Kiss them upside down like in a movie."
+        ],
+      
+        nape: [
+          "Kiss the back of their neck and whisper something sweet.",
+          "Slide their hair aside and kiss the nape gently.",
+          "Kiss the nape slowly while giving goosebumps.",
+          "Breathe on their neck before kissing it softly.",
+          "Hold their shoulders and leave tiny kisses on their nape.",
+          "Tease their neck with soft lips.",
+          "Kiss from shoulder to nape slowly.",
+          "Whisper their name and kiss their nape again.",
+          "Kiss the nape with both hands wrapped around their waist.",
+          "Rest your lips on their neck and stay there for a moment."
+        ],
+      
+        deep: [
+          "Engage in a deep French kiss for a few moments.",
+          "Kiss them slowly, then deepen the kiss with passion.",
+          "Kiss their bottom lip and pull gently.",
+          "Slide your hand behind their head as you kiss deeply.",
+          "Deep kiss them as music plays in the background.",
+          "Begin soft then pull them in for a deeper kiss.",
+          "Look into their eyes, then dive into a deep kiss.",
+          "Kiss them deeply while running fingers down their back.",
+          "Kiss them until you both forget where you are.",
+          "Deeply kiss them while whispering ‘stay with me’."
+        ],
+      
+        random: [
+          "Steal a spontaneous kiss when they least expect it.",
+          "Kiss them while they're talking mid-sentence.",
+          "Kiss their hand like a movie star.",
+          "Kiss their cheek while they're on a call.",
+          "Kiss them from behind as a surprise.",
+          "Randomly pull them close and kiss their lips.",
+          "Kiss them while they're laughing.",
+          "Kiss them in public just because.",
+          "Kiss their shoulder while waiting in line.",
+          "Give them a kiss after saying 'guess what!'"
+        ]
+      };
+      
+      const challengeLevels = {
+        easy: [
+          "Say something romantic in their ear.",
+          "Kiss them on the hand gently.",
+          "Give a long, warm hug.",
+          "Look into their eyes and say what you love about them.",
+          "Hold their face and smile silently.",
+          "Cuddle while watching a romantic video.",
+          "Trace your finger across their palm.",
+          "Compliment them in a cheesy way.",
+          "Hold hands and skip together.",
+          "Write 'I love you' with your finger on their back."
+        ],
+      
+        medium: [
+          "Give them a 30-second massage.",
+          "Kiss them in three places while they guess where.",
+          "Remove one accessory seductively.",
+          "Feed them something sweet and kiss the crumbs.",
+          "Whisper what you'd do on a romantic getaway.",
+          "Make them blush with a flirty stare.",
+          "Dance closely to a slow song.",
+          "Run your fingers through their hair slowly.",
+          "Sit on their lap and whisper something teasing.",
+          "Draw a heart on their arm and kiss it."
+        ],
+      
+        bold: [
+          "Perform a flirtatious dance.",
+          "Do a slow tease, but stop at the last moment.",
+          "Blindfold and tease with kisses.",
+          "Kiss them while gently pinning their hands.",
+          "Tempt them with slow touches and stop halfway.",
+          "Whisper your desires and act one out.",
+          "Use only your lips to trace shapes on their body.",
+          "Bite their lip and smirk.",
+          "Kiss them while backing them into a wall.",
+          "Challenge them to a playful seduction contest."
+        ],
+      
+        heated: [
+          "Use whipped cream creatively on their neck.",
+          "Trace ice slowly down their arm.",
+          "Share a deep fantasy in their ear.",
+          "Kiss and nibble their inner thigh.",
+          "Tie a scarf and guide their hands.",
+          "Lick a little chocolate and kiss them with it.",
+          "Blindfold them and touch gently.",
+          "Use scented oil to massage and kiss.",
+          "Play a heated round of truth or dare.",
+          "Gently pin them and whisper something wild."
+        ]
+      };
+      
+      function launchSmooch() {
+        document.getElementById('smooch-pick').style.display = 'block';
+        document.getElementById('challenge-pick').style.display = 'none';
+        document.getElementById('task-display').textContent = '';
+      }
+      
+      function launchChallenge() {
+        document.getElementById('challenge-pick').style.display = 'block';
+        document.getElementById('smooch-pick').style.display = 'none';
+        document.getElementById('task-display').textContent = '';
+      }
+      
+      function revealSmooch() {
+        const selectedType = document.getElementById('smoochType').value;  // Get the selected type of kiss (gentle, intense, etc.)
+        const smoochCategory = smoochList[selectedType];  // Retrieve the appropriate array for the selected kiss category
+        
+        const randomSmooch = smoochCategory[Math.floor(Math.random() * smoochCategory.length)];  // Pick a random kiss idea
+        document.getElementById('task-display').textContent = randomSmooch;  // Display the selected smooch
+      }
+      
+      function revealChallenge() {
+        const level = document.getElementById('challengeLevel').value;  // Get the selected challenge level
+        const challengeSet = challengeLevels[level];  // Retrieve the appropriate challenge set for the level
+        
+        const randomChallenge = challengeSet[Math.floor(Math.random() * challengeSet.length)];  // Pick a random challenge task
+        document.getElementById('task-display').textContent = randomChallenge;  // Display the selected challenge
+      }
+      
+  </script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Romantic Game Night</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff758c, #ff7eb3, #eeb8ff, #fad0c4);
+        }
+        .game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid #333;
+            background: conic-gradient(
+                red 0deg 45deg,
+                yellow 45deg 90deg,
+                green 90deg 135deg,
+                blue 135deg 180deg,
+                orange 180deg 225deg,
+                purple 225deg 270deg,
+                pink 270deg 315deg,
+                cyan 315deg 360deg
+            );
+            transition: transform 4s ease-out;
+        }
+        .arrow {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 30px solid black;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .scratch-container {
+            display: grid;
+            grid-template-columns: repeat(20, 50px);
+            grid-template-rows: repeat(50, 50px);
+            gap: 5px;
+        }
+        .scratch-card {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+        .scratch-image {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .scratch-overlay {
+            width: 100%;
+            height: 100%;
+            background: gray;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+        @media (max-width: 1024px) {
+            header h1 {
+                font-size: 2em;
+            }
+            main {
+                padding: 15px;
+            }
+            footer {
+                font-size: 0.8em;
+            }
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            main {
+                padding: 10px;
+            }
+            footer {
+                font-size: 0.75em;
+            }
+        }
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+            main {
+                padding: 5px;
+            }
+            footer {
+                font-size: 0.7em;
+            }
+            .content-box {
+                margin: 10px 0;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Romantic Game Night</h1>
+    <div class="game-container">
+        <div>
+            <h2>Spin the Wheel</h2>
+            <br><br><br>
+            <div class="wheel-container">
+                <div class="arrow"></div>
+                <div class="wheel" id="wheel"></div>
+            </div>
+            <button onclick="spinWheel()">Spin</button>
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentDegree = 0;
+
+        function spinWheel() {
+            const wheel = document.getElementById("wheel");
+            const result = document.getElementById("result");
+        
+            const baseSpeed = 1440;  // Min spin speed (4 rotations)
+            const randomDegree = baseSpeed + Math.floor(Math.random() * 360) + 1800;  // Ensure the wheel spins at least 5 times
+            const totalRotation = currentDegree + randomDegree;
+        
+            const spinDuration = 4;  // in seconds
+        
+            wheel.style.transition = `transform ${spinDuration}s ease-out`;
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+        
+            currentDegree += randomDegree;
+        
+            setTimeout(() => {
+                const sections = [
+                    "Give a hug", "Say I love you", "Compliment your partner", "Hold hands for 1 minute", 
+                    "Share a sweet secret", "Do a funny dance", "Whisper something romantic", 
+                    "Look into each other's eyes for 30 seconds", "Give a forehead kiss", "Write a love note", 
+                    "Give a back massage", "Share your favorite memory together", "Sing a love song", 
+                    "Slow dance together", "Tell your partner what you love most about them", "Give a playful tickle", 
+                    "Share a piece of chocolate", "Surprise your partner with a small gift", "Say something sweet in another language", 
+                    "Share a happy memory from your relationship", "Cook something together", "Watch a romantic movie together", 
+                    "Hold your partner’s face gently and smile", "Give a small peck on the nose", "Say what you admire about your partner", 
+                    "Share a dream or goal with each other", "Draw a heart on your partner’s palm", "Take a silly selfie together", 
+                    "Hold your partner from behind", "Say your favorite thing about their personality", "Give a loving nudge or playful push", 
+                    "Write I love you on their hand with your finger", "Pretend you just met and flirt with your partner", 
+                    "Share your favorite inside joke", "Gaze at the stars together even if it's indoors", "Make a pinky promise", 
+                    "Tell your partner your favorite feature about them", "Give a loving high-five", "Say something poetic to your partner", 
+                    "Make a heart shape with your hands", "Mimic the way your partner talks or laughs playfully", "Dance without music for 30 seconds", 
+                    "Give a kiss on the hand", "Say you mean the world to me", "Hold your partner close for 10 seconds", 
+                    "Pretend to propose or do it for real", "Blow a kiss from across the room", "Create a secret handshake", 
+                    "Feed your partner a bite of something sweet", "Wink at your partner flirtatiously", "Trace your partner's face with your finger", 
+                    "Say I'm lucky to have you", "Write a short love poem on a napkin or paper", "Plan a surprise date idea", 
+                    "Play a romantic song and hum along", "Do an exaggerated romantic gesture from a movie", "Try to make each other laugh for 1 minute", 
+                    "Say what your life would be like without them", "Wrap your arms around your partner like a cozy blanket", 
+                    "Whisper a sweet nickname in their ear", "Pretend to be a famous romantic couple", "Read a short love quote aloud", 
+                    "Draw a picture of your partner", "Share one thing you’ve never told them before", "Say what makes your partner unique and special", 
+                    "Call your partner by a pet name in a dramatic way", "Blow a raspberry on their cheek or hand", 
+                    "Make a heart with your fingers and hold it up to them", "Tell your partner something you find irresistible about them", 
+                    "Give a warm forehead touch", "Say you're my favorite person in the world", "Describe how your partner makes your life better", 
+                    "Take turns writing a short love story together", "Say what made you fall in love with them", "Try to guess each other's favorite romantic movie", 
+                    "Act out a cute romantic scene from a movie", "Tell your partner what color reminds you of them and why", "Do an air kiss from far away", 
+                    "Give a butterfly kiss blink your eyelashes on their skin", "Share one fun fact about your love story", 
+                    "Draw a heart somewhere on their hand with your finger", "Make a wish together while holding hands", "Reminisce about your first date", 
+                    "Share a favorite song lyric about love", "Say how you knew they were the one", "Write I love you in a creative way backwards symbols etc", 
+                    "Have a mini staring contest with a twist whoever smiles first loses", "Whisper I miss you even if they are right there", 
+                    "Pretend to be in a romantic movie and act it out", "Make a cute little sketch of both of you together", "Give a sweet kiss on the cheek", 
+                    "Say you complete me in your most dramatic voice", "Tell your partner a romantic fantasy you have", "Do a goofy love dance to make them laugh", 
+                    "Write down three things you adore about them and read them out loud", "Play a quick romantic guessing game guess my favorite memory of us", 
+                    "Leave a surprise love note somewhere for them to find later", "Say what your ideal romantic date with them would look like"
+                ];
+                const randomIndex = Math.floor(Math.random() * sections.length);
+                result.textContent = `Spin Result: ${sections[randomIndex]}`;
+            }, spinDuration * 1000);
+        }
+    </script>
+
+    <h2>Scratch Cards</h2>
+    <div class="scratch-container">
+        <div class="scratch-card" id="card1">
+            <div class="scratch-overlay" onclick="scratchCard(1)"></div>
+            <div class="scratch-image">Secret Love Note 1</div>
+        </div>
+        <div class="scratch-card" id="card2">
+            <div class="scratch-overlay" onclick="scratchCard(2)"></div>
+            <div class="scratch-image">Secret Love Note 2</div>
+        </div>
+    </div>
+
+    <script>
+        function scratchCard(cardId) {
+            const card = document.getElementById('card' + cardId);
+            card.querySelector('.scratch-overlay').style.display = 'none';
+            alert('You revealed a romantic note!');
+        }
+    </script>
+</body>
+</html>

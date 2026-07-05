@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>🔥 Flirty Fun Zone · Couples Edition</title>
+  <style>
+    /* ----- reset & base ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: radial-gradient(circle at 20% 30%, #fce4ec, #f8e0e8);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* ----- main card ----- */
+    .fun-arena {
+      background: rgba(255, 248, 250, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 2.2rem 1.8rem;
+      border-radius: 48px;
+      box-shadow: 0 20px 50px rgba(180, 40, 80, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.5);
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #d43f6b, #b02a55);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.25rem;
+    }
+    .subhead {
+      color: #6b4b57;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+      border-bottom: 2px dashed #f2b8c9;
+      padding-bottom: 0.8rem;
+    }
+
+    /* ----- buttons & selects ----- */
+    .action-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      margin: 1.2rem 0 1rem;
+    }
+    .action-btn {
+      background: #ff4d7a;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 4px 12px rgba(255, 45, 85, 0.25);
+      flex: 1 1 auto;
+      min-width: 120px;
+    }
+    .action-btn:hover {
+      background: #e63e6a;
+      transform: scale(0.97);
+    }
+    .action-btn.secondary {
+      background: #b3a0b0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .action-btn.secondary:hover { background: #9e8a9b; }
+    .action-btn.intimate {
+      background: #8e44ad;
+      box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+    }
+    .action-btn.intimate:hover { background: #7d3c98; }
+
+    select {
+      padding: 0.7rem 1.2rem;
+      border-radius: 60px;
+      border: 1px solid #f0c8d4;
+      background: white;
+      font-weight: 500;
+      color: #2d1b22;
+      width: 100%;
+      max-width: 220px;
+      margin: 0.3rem auto;
+      cursor: pointer;
+      outline: none;
+      transition: 0.2s;
+    }
+    select:focus { border-color: #ff4d7a; box-shadow: 0 0 0 3px rgba(255,45,85,0.1); }
+
+    .picker-box {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(4px);
+      padding: 1.2rem 0.8rem;
+      border-radius: 40px;
+      margin: 1rem 0;
+      display: none;
+      animation: fadeSlide 0.25s ease;
+    }
+    .picker-box.active { display: block; }
+
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateY(8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ----- result display ----- */
+    #task-display {
+      margin: 1.8rem 0 0.8rem;
+      padding: 1.2rem 1rem;
+      background: white;
+      border-radius: 40px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #2d1b22;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      line-height: 1.5;
+      transition: 0.2s;
+    }
+    #task-display .emoji-big { font-size: 2rem; margin-right: 10px; }
+
+    /* ----- mood badge ----- */
+    .mood-badge {
+      display: inline-block;
+      background: #ffe2eb;
+      padding: 0.25rem 1.2rem;
+      border-radius: 40px;
+      color: #8f4b5e;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin-top: 0.5rem;
+    }
+
+    /* ----- responsive fine-tune ----- */
+    @media (max-width: 480px) {
+      .fun-arena { padding: 1.5rem 1rem; }
+      h1 { font-size: 2rem; }
+      .action-btn { min-width: 100px; padding: 0.7rem 1.2rem; }
+      select { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="fun-arena">
+  <h1>💞 Flirty Fun</h1>
+  <div class="subhead">· romantic · intimate · playful ·</div>
+
+  <!-- MAIN BUTTONS -->
+  <div class="action-group">
+    <button class="action-btn" onclick="showPicker('smooch')"><i class="fas fa-kiss" style="margin-right:6px;"></i> Smooch</button>
+    <button class="action-btn" onclick="showPicker('challenge')"><i class="fas fa-fire" style="margin-right:6px;"></i> Challenge</button>
+    <button class="action-btn intimate" onclick="showPicker('intimate')"><i class="fas fa-heart" style="margin-right:6px;"></i> Intimate</button>
+    <button class="action-btn secondary" onclick="surpriseMe()"><i class="fas fa-magic"></i> Surprise</button>
+  </div>
+
+  <!-- SMOOCH PICKER -->
+  <div id="smooch-pick" class="picker-box">
+    <p style="font-weight:600;color:#6b3b4a;">💋 choose your vibe</p>
+    <select id="smoochType">
+      <option value="gentle">🌷 Gentle</option>
+      <option value="intense">🔥 Intense</option>
+      <option value="cute">🐣 Cute Peck</option>
+      <option value="nape">🌙 Neck Kiss</option>
+      <option value="deep">🌊 Deep French</option>
+      <option value="random">🎲 Random Smooch</option>
+    </select>
+    <button class="action-btn" style="width:100%;margin-top:0.5rem;" onclick="revealSmooch()">💋 Reveal Kiss</button>
+  </div>
+
+  <!-- CHALLENGE PICKER -->
+  <div id="challenge-pick" class="picker-box">
+    <p style="font-weight:600;color:#6b3b4a;">🔥 pick your heat level</p>
+    <select id="challengeLevel">
+      <option value="easy">🌱 Easy</option>
+      <option value="medium">🌿 Medium</option>
+      <option value="bold">⚡ Bold</option>
+      <option value="heated">🌶️ Heated</option>
+    </select>
+    <button class="action-btn" style="width:100%;margin-top:0.5rem;" onclick="revealChallenge()">⚡ Dare Me</button>
+  </div>
+
+  <!-- INTIMATE PICKER -->
+  <div id="intimate-pick" class="picker-box">
+    <p style="font-weight:600;color:#6b3b4a;">🌹 intimate & wild</p>
+    <select id="intimateLevel">
+      <option value="sensual">🕯️ Sensual Touch</option>
+      <option value="passionate">💞 Passionate</option>
+      <option value="romantic">🌹 Romantic</option>
+      <option value="wild">🌶️ Wild & Playful</option>
+      <option value="extreme">🔥 Extreme & Intense</option>
+    </select>
+    <button class="action-btn intimate" style="width:100%;margin-top:0.5rem;" onclick="revealIntimate()">🌹 Reveal</button>
+  </div>
+
+  <!-- RESULT CARD -->
+  <div id="task-display">
+    <span class="emoji-big">✨</span> pick a mood...
+  </div>
+
+  <div class="mood-badge" id="moodBadge">❤️ romantic mode</div>
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<script>
+  // ============================================================
+  //  EXTREME LIST – 400+ prompts focused on touching, kissing, licking
+  //  using only yogurt or massage oil
+  // ============================================================
+
+  function generateExtremeList() {
+    const items = ["yogurt", "massage oil"];
+    const targets = [
+      "penis", "vagina", "thighs", "chest", "stomach", "neck", 
+      "shoulders", "back", "hips", "belly button", "nipples", 
+      "earlobes", "feet", "hands", "fingers", "toes", 
+      "lower belly", "collarbone", "spine", "wrists", 
+      "inner thighs", "breasts", "buttocks", "lower back",
+      "jawline", "collarbone", "sternum", "ribs", "hips"
+    ];
+    const moves = [
+      "lick it off slowly", "kiss it gently", "massage it in with your fingers", 
+      "spread it with your tongue", "suck it clean", "nibble gently while kissing",
+      "trace circles with your tongue", "lick it up and down", 
+      "kiss your way across it", "lick it while maintaining eye contact",
+      "use your tongue to spread it", "kiss it and lick the residue",
+      "massage it in with your lips", "lick it in slow motion",
+      "kiss it, then lick it clean", "trace your tongue over it",
+      "suck it off gently", "nibble and kiss it clean",
+      "lick it off with passion", "kiss it and gently blow on it",
+      "massage it in while kissing", "lick it clean and kiss the spot"
+    ];
+    const adverbs = [
+      "slowly", "with passion", "seductively", "while maintaining eye contact", 
+      "sensually", "with intensity", "playfully", "hungrily", "gently", 
+      "firmly", "tenderly", "with deep desire", "teasingly", "softly",
+      "with a smile", "while whispering their name", "with long, slow strokes",
+      "in circular motions", "with deliberate slowness", "eagerly"
+    ];
+    const extras = [
+      " and whisper something sweet", " while they watch", " and hum softly",
+      " and pull away slowly", " then dive back in", " and smile at them",
+      " and look into their eyes", " and moan softly", " and kiss them after",
+      " and breathe on it", " and trace it with your finger", " and enjoy every moment"
+    ];
+
+    const extremes = new Set();
+
+    while (extremes.size < 400) {
+      const item = items[Math.floor(Math.random() * items.length)];
+      const target = targets[Math.floor(Math.random() * targets.length)];
+      const move = moves[Math.floor(Math.random() * moves.length)];
+      const adverb = adverbs[Math.floor(Math.random() * adverbs.length)];
+      const extra = extras[Math.floor(Math.random() * extras.length)];
+
+      let phrase = `🔥 Apply ${item} to their ${target}, then ${move} ${adverb}${extra}`;
+      extremes.add(phrase);
+    }
+
+    return Array.from(extremes);
+  }
+
+  // ----- INTIMATE LISTS (with generated extreme) -----
+  const intimateList = {
+    sensual: [
+      "🕯️ Trace your fingers lightly from their neck down to their chest.",
+      "🌹 Kiss their neck slowly while running your hand through their hair.",
+      "💆 Give a sensual shoulder massage with coconut oil.",
+      "🔥 Kiss their collarbone and whisper something sweet.",
+      "🌊 Breathe softly against their ear while holding them close.",
+      "💋 Kiss from their lips down to their chest, slowly.",
+      "🌸 Use a feather or soft fabric to tease their skin.",
+      "✨ Hold their face gently and kiss them with deep tenderness.",
+      "🌙 Kiss their stomach while looking into their eyes.",
+      "💞 Trace circles on their back with your fingertips.",
+      "🔥 Kiss their inner wrist and feel their pulse.",
+      "🌹 Kiss their shoulder and slowly move down their arm.",
+      "🕯️ Massage their feet with scented lotion and kiss each toe.",
+      "💗 Kiss their lips, then pull back and admire them.",
+      "🌊 Kiss them with your eyes open, locking gaze."
+    ],
+    passionate: [
+      "💞 Kiss them with raw emotion, holding their face firmly.",
+      "🔥 Gently push them against the bed and kiss them passionately.",
+      "🌹 Kiss them while softly moaning their name.",
+      "💥 Run your hands down their body as you kiss them deeply.",
+      "🌊 Kiss them with urgency, then slow down to savor it.",
+      "💋 Kiss them and whisper 'I want you' between breaths.",
+      "🔥 Kiss their neck while undoing the first button of their shirt.",
+      "💞 Kiss them and pull them closer, feeling every inch.",
+      "🌹 Kiss them with so much intensity that you both lose track of time.",
+      "💥 Kiss them and gently bite their lower lip, then soothe it.",
+      "🔥 Kiss them and slide your hand under their shirt.",
+      "💋 Kiss them deeply, then kiss their collarbone.",
+      "🌊 Kiss them with unspoken desire, letting your hands wander.",
+      "💞 Kiss them and whisper a secret desire in their ear.",
+      "🔥 Kiss them like it's the first and last time."
+    ],
+    romantic: [
+      "🌹 Light a candle and kiss them softly in the warm glow.",
+      "💞 Hold their hand and kiss them under the moonlight.",
+      "🌸 Kiss them while slow dancing in the living room.",
+      "💗 Kiss them and say 'you're my everything'.",
+      "🌙 Kiss their forehead and tell them a love story.",
+      "✨ Kiss them while watching the sunrise together.",
+      "💋 Kiss them and play their favorite song afterward.",
+      "🌹 Write a love note and kiss them before they read it.",
+      "💞 Kiss them and hold them for a full minute in silence.",
+      "🌸 Kiss them and tell them what you love most about them.",
+      "💗 Kiss them and make a promise to always be true.",
+      "🌙 Kiss them and share your favorite memory together.",
+      "✨ Kiss them and dream about your future together.",
+      "💋 Kiss them and say 'I'm so grateful for you'.",
+      "🌹 Kiss them and give them a small gift (like a flower)."
+    ],
+    wild: [
+      "🌶️ Pour a little yogurt on their chest and lick it off slowly.",
+      "💥 Drip honey on their stomach and kiss your way down.",
+      "🔥 Use chocolate syrup as body paint and taste it off them.",
+      "🌊 Put whipped cream on their thighs and eat it sensually.",
+      "💋 Drip warm oil on their back and massage it in with your lips.",
+      "🌶️ Pour yogurt on their inner thigh and lick it clean.",
+      "🔥 Drip melted chocolate on their neck and kiss it off.",
+      "💥 Use honey on their fingers and suck it off one by one.",
+      "🌊 Put whipped cream on their chest and lick it off slowly.",
+      "💋 Drip warm honey on their stomach and kiss your way up.",
+      "🌶️ Pour yogurt on their shoulders and lick it off.",
+      "🔥 Use chocolate sauce on their hips and taste it.",
+      "💥 Drip oil on their lower back and massage with your tongue.",
+      "🌊 Put whipped cream on their earlobe and kiss it off.",
+      "💋 Drip honey on their collarbone and lick it clean."
+    ],
+    extreme: generateExtremeList() // 400+ focused on touching, kissing, licking with yogurt/oil
+  };
+
+  // ----- SMOOCH & CHALLENGE LISTS (unchanged) -----
+  const smoochList = {
+    gentle: [
+      "🌷 Plant a soft, slow kiss on the lips and hold for 3 seconds.",
+      "🌸 Kiss their forehead while stroking their hair.",
+      "👑 Kiss their hand like royalty, then look into their eyes.",
+      "💗 Press your lips gently against theirs, then whisper 'you're beautiful'.",
+      "😌 Kiss their cheek and rest your forehead against theirs.",
+      "🌙 Kiss their closed eyelids, one after the other.",
+      "🦋 Give a butterfly kiss with your eyelashes.",
+      "🤲 Kiss their palm and gently close their fingers around it.",
+      "💋 Kiss their shoulder while hugging from behind.",
+      "🌅 Kiss them at sunrise with a soft smile.",
+      "🎵 Kiss them in rhythm to a slow song.",
+      "💤 Kiss their forehead as they drift to sleep.",
+      "🌸 Kiss the tip of their nose and call them 'sweetheart'.",
+      "🤗 Kiss their neck lightly and hug them tight.",
+      "🌟 Kiss them and say 'you're my favorite daydream'.",
+      "💞 Kiss their collarbone and rest your head on their chest.",
+      "🌊 Kiss them with your eyes closed and let the moment linger.",
+      "🍃 Kiss their ear lobe and breathe softly.",
+      "💭 Kiss their lips and share a secret smile.",
+      "✨ Kiss their hand and trace a heart on their palm.",
+      "🌺 Kiss their shoulder blade while spooning.",
+      "🍫 Kiss them like they're the sweetest thing you've ever tasted.",
+      "💤 Kiss them goodnight and hold them close.",
+      "🌿 Kiss their neck and whisper a promise.",
+      "💖 Kiss them and say 'I choose you, always'."
+    ],
+    intense: [
+      "🔥 Pull them close and kiss them with raw passion, hands in their hair.",
+      "💥 Kiss them against the wall, breathless and urgent.",
+      "🌪️ Deep kiss them while gripping their hips firmly.",
+      "💋 Kiss them like you mean it – fierce, deep, and hungry.",
+      "⚡ Lock eyes, then kiss them with intense desire.",
+      "🌹 Kiss them slowly, then deepen with a gentle bite on the lower lip.",
+      "💫 Kiss them while pressing your body against theirs.",
+      "🌊 Kiss them with such intensity that you both forget time.",
+      "🔥 Kiss their neck, then return to their lips with urgency.",
+      "💞 Kiss them and whisper 'I need you' between breaths.",
+      "🎇 Kiss them with all the fire you've been holding back.",
+      "💥 Kiss them until you're both dizzy, then kiss them again.",
+      "🌋 Kiss them deeply, then pull back and stare into their soul.",
+      "💗 Kiss them with the kind of passion that leaves goosebumps.",
+      "🔥 Kiss them and run your fingers down their spine.",
+      "💋 Kiss them and softly bite their lip, then soothe it with a kiss.",
+      "⚡ Kiss them with intensity while holding their face firmly.",
+      "🌊 Kiss them like it's the first and last time.",
+      "💥 Kiss them and whisper a secret desire in their ear.",
+      "🔥 Kiss them with unspoken longing."
+    ],
+    cute: [
+      "🐣 Give a quick peck and giggle like a schoolgirl/boy.",
+      "😘 Blow a kiss and catch it, then place it on their lips.",
+      "💋 Kiss their nose and say 'boop'.",
+      "😊 Kiss them while smiling so much it's hard to kiss.",
+      "🌸 Kiss their cheek and run away playfully.",
+      "💖 Give a series of tiny pecks all over their face.",
+      "😚 Kiss them and make a silly sound effect.",
+      "💋 Kiss them and say 'you're mine' with a wink.",
+      "✨ Kiss them while holding both their hands.",
+      "🌺 Give them a 'Eskimo kiss' (rub noses).",
+      "😄 Kiss them after they say something funny.",
+      "💗 Kiss their forehead and say 'my cutie'.",
+      "🐱 Kiss them like a cat – a tiny, quick boop.",
+      "🌸 Kiss them and leave a lipstick mark (or pretend to).",
+      "💋 Kiss them and immediately hug them tightly.",
+      "🌟 Give a kiss that's more of a happy smooch.",
+      "😚 Kiss them and say 'that's for good luck'.",
+      "💖 Kiss them with a playful 'mwah' sound.",
+      "🌸 Kiss their hand and bow playfully.",
+      "🐣 Give a peck and then hide your face."
+    ],
+    nape: [
+      "🌙 Gently move their hair aside and kiss the nape of their neck.",
+      "💋 Leave a soft, lingering kiss on the back of their neck.",
+      "🌊 Kiss the nape and whisper something sweet against their skin.",
+      "🌸 Breathe warm air on their neck before kissing it.",
+      "💞 Kiss from their shoulder up to the nape, slowly.",
+      "🍃 Kiss the nape while holding their waist.",
+      "🌙 Kiss the nape and gently nibble, then soothe with a kiss.",
+      "💗 Kiss the nape and feel them shiver.",
+      "🔥 Kiss the nape with intention, then turn them around for a real kiss.",
+      "🌹 Kiss the nape and say 'you smell incredible'.",
+      "✨ Kiss the nape while they're cooking or busy – surprise them.",
+      "💋 Kiss the nape and leave a tiny mark (if they're into it).",
+      "🌿 Kiss the nape and trace your fingers down their spine.",
+      "💖 Kiss the nape and hug them from behind.",
+      "🌸 Kiss the nape and whisper a secret."
+    ],
+    deep: [
+      "🌊 Engage in a deep, soulful French kiss, slow and passionate.",
+      "💋 Kiss them deeply, then pull away just to look at them.",
+      "🔥 Deep kiss with a gentle tug on their bottom lip.",
+      "💫 Kiss them with tongue, slow and deliberate.",
+      "🌹 Deep kiss while holding the back of their head.",
+      "💞 Kiss them so deeply that you forget to breathe.",
+      "🌪️ Deep kiss them, then whisper 'more'.",
+      "💥 Deep kiss with a soft moan.",
+      "🌊 French kiss them while running your hands through their hair.",
+      "💋 Deep kiss them and slowly pull back, eyes still closed.",
+      "🔥 Deep kiss them and let your hands wander gently.",
+      "🌹 Kiss them deeply, then kiss their jawline.",
+      "💫 Deep kiss with a playful bite on the lip.",
+      "💞 Deep kiss them and say 'I love the way you kiss'.",
+      "🌊 Deep kiss them under the stars."
+    ],
+    random: [
+      "🎲 Surprise them with a kiss on the forehead while they're talking.",
+      "🎉 Kiss them spontaneously on the cheek in public.",
+      "💋 Steal a kiss while they're mid-laugh.",
+      "🌸 Randomly pull them close and kiss them.",
+      "😘 Kiss them from behind when they least expect it.",
+      "✨ Kiss them after saying 'I just felt like kissing you'.",
+      "💗 Give a random kiss on the hand and walk away.",
+      "🎈 Kiss them on the nose and say 'gotcha'.",
+      "💖 Kiss them while they're busy and watch them smile.",
+      "🌺 Kiss them and say 'because I can'.",
+      "🎲 Kiss them and then act like nothing happened.",
+      "💋 Randomly kiss their shoulder while passing by.",
+      "🌸 Kiss them with a big smile.",
+      "💞 Give a spontaneous kiss and hold it for a second.",
+      "🎉 Kiss them and say 'that's for good vibes'."
+    ]
+  };
+
+  const challengeLevels = {
+    easy: [
+      "🌱 Whisper something romantic in their ear.",
+      "🌿 Hold their hand and kiss it gently.",
+      "🌸 Give a long, warm hug and say 'you're my safe place'.",
+      "💗 Look into their eyes and say three things you love about them.",
+      "🌷 Trace a heart on their palm with your finger.",
+      "☕ Cuddle together for 2 minutes in silence.",
+      "🌺 Play with their hair and kiss their forehead.",
+      "🍃 Compliment them in the cheesiest way possible.",
+      "💋 Give them a massage for 1 minute.",
+      "🌙 Tell them a childhood memory that makes you smile."
+    ],
+    medium: [
+      "🌿 Give them a 2-minute back rub with oil.",
+      "💋 Kiss them in three different places (they guess where).",
+      "🌸 Slowly remove their watch or bracelet while staring at them.",
+      "🍫 Feed them a piece of chocolate and kiss them after.",
+      "💗 Whisper what you'd do on a romantic getaway.",
+      "🌊 Make them blush with a lingering, intense stare.",
+      "🎵 Dance with them to a slow song, eyes locked.",
+      "💆 Run your fingers through their hair slowly.",
+      "🪑 Sit on their lap and whisper something teasing.",
+      "💞 Draw a heart on their arm and kiss it."
+    ],
+    bold: [
+      "⚡ Perform a slow, flirtatious dance for 30 seconds.",
+      "🔥 Do a slow tease – kiss them and pull away twice.",
+      "🎭 Blindfold them and kiss them in different spots.",
+      "💋 Kiss them while gently pinning their hands above their head.",
+      "🌶️ Tempt them with slow touches, then stop and smile.",
+      "💥 Whisper your deepest desire and act out one part.",
+      "🖍️ Use only your lips to trace a shape on their neck.",
+      "🍬 Bite their lip softly and smirk.",
+      "🧣 Kiss them while backing them against a wall.",
+      "🎲 Challenge them to a 'who can make the other blush more' contest."
+    ],
+    heated: [
+      "🌶️ Use whipped cream or honey on their neck and kiss it off.",
+      "❄️ Trace an ice cube slowly down their chest or arm.",
+      "💭 Share a secret fantasy in their ear, then kiss them.",
+      "💋 Kiss and gently nibble their inner thigh.",
+      "🎀 Tie a silk scarf around their wrists (playful restraint).",
+      "🍫 Melt a piece of chocolate on their skin and kiss it.",
+      "🕯️ Blindfold them and use a feather or your fingers to tease.",
+      "🛢️ Give a sensual massage with scented oil, then kiss.",
+      "🎲 Play a heated round of truth or dare (you choose the dare).",
+      "💥 Gently pin them down and whisper something wild."
+    ]
+  };
+
+  // ----- UI logic -----
+  function showPicker(type) {
+    const smoochBox = document.getElementById('smooch-pick');
+    const challengeBox = document.getElementById('challenge-pick');
+    const intimateBox = document.getElementById('intimate-pick');
+    const moodBadge = document.getElementById('moodBadge');
+
+    smoochBox.classList.remove('active');
+    challengeBox.classList.remove('active');
+    intimateBox.classList.remove('active');
+
+    if (type === 'smooch') {
+      smoochBox.classList.add('active');
+      moodBadge.textContent = '💋 kiss mode';
+    } else if (type === 'challenge') {
+      challengeBox.classList.add('active');
+      moodBadge.textContent = '🔥 challenge mode';
+    } else if (type === 'intimate') {
+      intimateBox.classList.add('active');
+      moodBadge.textContent = '🌹 intimate mode';
+    }
+    document.getElementById('task-display').innerHTML = `<span class="emoji-big">✨</span> ready...`;
+  }
+
+  function revealSmooch() {
+    const type = document.getElementById('smoochType').value;
+    const list = smoochList[type] || smoochList.random;
+    const pick = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('task-display').innerHTML = `<span class="emoji-big">💋</span> ${pick}`;
+    document.getElementById('moodBadge').textContent = `💋 ${type} vibe`;
+  }
+
+  function revealChallenge() {
+    const level = document.getElementById('challengeLevel').value;
+    const list = challengeLevels[level] || challengeLevels.easy;
+    const pick = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('task-display').innerHTML = `<span class="emoji-big">🔥</span> ${pick}`;
+    document.getElementById('moodBadge').textContent = `⚡ ${level} heat`;
+  }
+
+  function revealIntimate() {
+    const level = document.getElementById('intimateLevel').value;
+    const list = intimateList[level] || intimateList.sensual;
+    const pick = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('task-display').innerHTML = `<span class="emoji-big">🌹</span> ${pick}`;
+    document.getElementById('moodBadge').textContent = `🌹 ${level} intimacy`;
+  }
+
+  function surpriseMe() {
+    const r = Math.random();
+    if (r < 0.33) {
+      const keys = Object.keys(smoochList);
+      const randKey = keys[Math.floor(Math.random() * keys.length)];
+      document.getElementById('smoochType').value = randKey;
+      showPicker('smooch');
+      revealSmooch();
+    } else if (r < 0.66) {
+      const keys = Object.keys(challengeLevels);
+      const randKey = keys[Math.floor(Math.random() * keys.length)];
+      document.getElementById('challengeLevel').value = randKey;
+      showPicker('challenge');
+      revealChallenge();
+    } else {
+      const keys = Object.keys(intimateList);
+      const randKey = keys[Math.floor(Math.random() * keys.length)];
+      document.getElementById('intimateLevel').value = randKey;
+      showPicker('intimate');
+      revealIntimate();
+    }
+    document.getElementById('moodBadge').textContent = '🎲 surprise!';
+  }
+
+  // show default picker
+  window.onload = () => {
+    document.getElementById('smooch-pick').classList.add('active');
+    document.getElementById('task-display').innerHTML = `<span class="emoji-big">💗</span> choose your flirty adventure`;
+  };
+</script>
+</body>
+</html>

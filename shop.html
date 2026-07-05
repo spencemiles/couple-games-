@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Affiliate Product Hub</title>
+  <style>
+    * 
+      body {
+        background-color: #030303;
+      }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* 4 on desktop */
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 20px;
+    }
+    
+    /* For tablets */
+    @media (max-width: 992px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    /* For mobile */
+    @media (max-width: 600px) {
+      .product-grid {
+        grid-template-columns: 1fr; /* 1 column on mobile */
+      }
+    }
+    
+
+    header {
+      background-color: #fa7fc6;
+      color: #fff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .nav-center label {
+      font-weight: 500;
+    }
+
+    select {
+      padding: 8px 12px;
+      font-size: 15px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-right input {
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      width: 200px;
+    }
+
+    .nav-right .icon {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    section {
+      padding: 80px 20px;
+      border-top: 1px solid #eee;
+    }
+
+    section h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #fa7fc6;
+    }
+
+    section p {
+      max-width: 700px;
+      text-align: center;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+      }
+
+      .nav-right input {
+        width: 100%;
+      }
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .product-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .product-card h3 {
+      margin: 10px;
+      font-size: 18px;
+    }
+
+    .product-card p {
+      margin: 0 10px 10px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .product-card a {
+      display: block;
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      text-decoration: none;
+      border-top: 1px solid #eee;
+    }
+
+    .product-card a:hover {
+      background-color: #444;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #eee;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="navbar">
+      <div class="logo">Affiliate Hub</div>
+
+      <div class="category-dropdown">
+        <select id="category-select" onchange="scrollToCategory()">
+          <option value="">Category</option>
+          <option value="couple-night-games">Couple Night Games</option>
+          <option value="friends-board-games">Friends Board Games</option>
+          <option value="couple-ebooks">Couple eBooks</option>
+        </select>
+      </div>
+      
+      <style>
+        .category-dropdown {
+          position: fixed;
+          top: 1rem;
+          right: 1rem;
+          z-index: 1000;
+        }
+      
+        .category-dropdown select {
+          padding: 8px 12px;
+          font-size: 14px;
+          border: 2px solid #6a5acd;
+          border-radius: 20px;
+          background-color: #fff;
+          color: #333;
+          cursor: pointer;
+          box-shadow: 0 0 8px rgba(0,0,0,0.1);
+          transition: all 0.3s ease-in-out;
+        }
+      
+        .category-dropdown select:hover {
+          box-shadow: 0 0 12px rgba(106, 90, 205, 0.5);
+          transform: scale(1.05);
+        }
+      </style>
+      
+
+      
+
+    </div>
+  </header>
+  <script>
+    function scrollToCategory() {
+      const category = document.getElementById("category-select").value;
+      if (category) {
+        const section = document.getElementById(category);
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+  </script>
+  <br>
+  <br>
+  <br>
+<!-- COUPLE NIGHT GAMES SECTION -->
+<section id="couple-night-games">
+  <div class="button-wrapper">
+    <a href="Naughty.html" class="back-btn">← Back to Games</a>
+  </div>
+  
+  <style>
+    .button-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px; /* adjust spacing as needed */
+    }
+  
+    .back-btn {
+      background-color: #cb5b9c;
+      color: white;
+      text-decoration: none;
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      border-radius: 30px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 3px 8px rgba(250, 127, 198, 0.3);
+      font-weight: 500;
+    }
+  
+    .back-btn:hover {
+      background-color: #e369b3;
+      transform: translateY(-1px) scale(1.05);
+    }
+  </style>
+  
+  <h2>Couple Night Games</h2>
+  <div class="product-grid">
+    <!-- 20 Product Cards -->
+    <div class="product-card">
+      <img src="https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/15/3400552/1.jpg?4504" alt="Product">
+      <h3>Couple Night Game 1</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/16udi">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://i.ebayimg.com/images/g/cmQAAOSw-sRdAfZW/s-l1200.jpg" alt="Product">
+      <h3>Couple Night Game 2</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/17u3e">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/67/5223162/1.jpg?2122" alt="Product">
+      <h3>Couple Night Game 3</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/16uds">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://gamenights254.com/wp-content/uploads/2021/10/20230608_104531.jpg" alt="Product">
+      <h3>Couple Night Game 4</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/18e5g">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.made-in-china.com/2f0j00caBqDHbyZlkI/10PCS-Bdsm-Bondage-Suit-Adult-Sex-Toy-for-Women-Fetish-Kits-Bed-Restraints-Bondage-Plush-PU-Sexy-Flirting-Alternative-Toys.webp" alt="Product">
+      <h3>Couple Night Game 5</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/18lo7">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/5055/goods_image/240924210733_b1b9d46c6f1ea32e650d28e81edc574a.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 6</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1qe89">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/8464/2023/02/167653064981838073ec8dcc04ee6b9b7b2b7043cbe91.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 7</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1qkls">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/7763/2021/11/16382838866234f1167fda0e14b51a0b1a3cc51e3f50a.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 8</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1esf5">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/100003526/goods_image/241024144053_5f0aa06f6a82954dd83d174fe2c9a131.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 9</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1esgr">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/100005323/goods_image/250116195107_7f3b844ce365bb2fd0db62fef1eb330a.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 10</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/19s8q">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/public/store/8273/goods/image/101811141.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 11</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1esfr">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/public/store/11305/goods/image/101648260.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 12</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/16zyg">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/10253/goods_image/240909042320_2519ae1a6cdc4496a5f91f96f59d2533.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 13</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1esfi">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/2427/2018/04/2427_05772214975620928.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 14</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1esg1">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/100007286/goods_image/250406145508_1f3acfe06e5b2be26d87afcbe1fbcc01.png?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 15</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1esg5">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/6265/goods_image/241202152215_c213f7184dc182def9fc9c8d76ddeeb3.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 16</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/16od9">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/100003145/goods_image/241117144106_bb7d282a3fc8b655bdaf983541e13dc9.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 17</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1673f">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/5092/2021/10/1634606807812adba70d3dfb047de82c76dba28c4828c.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 18</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/17le0">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/5092/2022/10/1666237760817db0117a6c42740e9891f0a5b18a3fdfd.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 19</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1esg9">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/100003145/goods_image/250108135411_588291d869ee8bd33d65cd92a7c6c609.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Couple Night Game 20</h3>
+      <p>Fun game for couples to enjoy quality time.</p>
+      <a href="http://k.kili.co/1esyg">Buy Now</a>
+    </div>
+    
+    <!-- Repeat this card 19 more times -->
+    <!-- 🔽 ADD MORE COUPLE NIGHT GAME PRODUCTS BELOW THIS LINE (total 20) -->
+  </div>
+</section>
+
+<!-- FRIENDS BOARD GAMES SECTION -->
+<section id="friends-board-games">
+  <h2>Friends Board Games</h2>
+  <div class="product-grid">
+    <!-- 20 Product Cards -->
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/10736/2023/11/1701161890743d7f622aed33746e08fe51a3da0510837.png?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Friends Board Game 1</h3>
+      <p>Perfect for game nights with friends.</p>
+      <a href="http://k.kili.co/1esgi">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/100007065/goods_image/250331123544_459339876a8db7421f2b59f75c11d805.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Friends Board Game 2</h3>
+      <p>Perfect for game nights with friends.</p>
+      <a href="http://k.kili.co/1esgs">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/6468/2023/01/1672826455874e576406d638344cbad2a2c70f34a80f9.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Friends Board Game 3</h3>
+      <p>Perfect for game nights with friends.</p>
+      <a href="http://k.kili.co/1esgh">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/9499/2023/07/1690441379266a4ea0a5368e54a2e891680d5af9b30c5.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Friends Board Game 4</h3>
+      <p>Perfect for game nights with friends.</p>
+      <a href="http://k.kili.co/16xof">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/10736/2023/09/16958101203399fe608f1819047c0824dae115cc03bad.png?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Friends Board Game 5</h3>
+      <p>Perfect for game nights with friends.</p>
+      <a href=" http://k.kili.co/1quj5">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/obs/seller/6097/goods_image/240909134252_14448951ccfe99e67ba9b275ca8067df.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Friends Board Game 6</h3>
+      <p>Perfect for game nights with friends.</p>
+      <a href="http://k.kili.co/16qec">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://img.kilimall.com/c/public/store/7897/goods/image/101290650.jpeg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Friends Board Game 7</h3>
+      <p>Perfect for game nights with friends.</p>
+      <a href="http://k.kili.co/1esh5">Buy Now</a>
+    </div>
+    <div class="product-card">
+      <img src="https://image.kilimall.com/kenya/shop/store/goods/5464/2023/02/167730893693634cff10071414af0b3c68abf4a407fb6.jpg?x-image-process=image/format,webp/resize,w_720#" alt="Product">
+      <h3>Friends Board Game 8</h3>
+      <p>Perfect for game nights with friends.</p>
+      <a href="http://k.kili.co/1681a">Buy Now</a>
+    </div>
+   
+    
+    <!-- Repeat this card 19 more times -->
+    <!-- 🔽 ADD MORE FRIENDS BOARD GAME PRODUCTS BELOW THIS LINE (total 20) -->
+  </div>
+  <div class="button-container">
+    <a href="Naughty.html" class="back-btn">← Back to Playing Games</a>
+    <strong class="notice-text">More products to come</strong>
+  </div>
+  
+  <style>
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      text-align: center;
+      gap: 1rem;
+    }
+  
+    .back-btn {
+      background-color: #6a5acd; /* Soft purple */
+      color: #fff;
+      text-decoration: none;
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 40px;
+      animation: pulse 2s infinite;
+      box-shadow: 0 4px 15px rgba(106, 90, 205, 0.4);
+      transition: transform 0.2s ease-in-out;
+    }
+  
+    .back-btn:hover {
+      transform: scale(1.1);
+      background-color: #5a4cc5;
+    }
+  
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.08);
+      }
+    }
+  
+    .notice-text {
+      color: #444;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+  </style>
+  
+<footer>
+  &copy; 2025 Affiliate E-Commerce Site. All rights reserved.
+</footer>
+
+<script>
+  function scrollToCategory() {
+    const selected = document.getElementById('category-select').value;
+    if (selected) {
+      const section = document.getElementById(selected);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
+  
+</script>
+<script>
+  function updateGridColumns() {
+    const grids = document.querySelectorAll('.product-grid');
+    const screenWidth = window.innerWidth;
+
+    grids.forEach(grid => {
+      if (screenWidth <= 600) {
+        grid.style.gridTemplateColumns = '1fr';
+      } else if (screenWidth <= 992) {
+        grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+      } else {
+        grid.style.gridTemplateColumns = 'repeat(4, 1fr)';
+      }
+    });
+  }
+
+  // Run on load and resize
+  window.addEventListener('load', updateGridColumns);
+  window.addEventListener('resize', updateGridColumns);
+</script>
+
+</body>
+</html>
