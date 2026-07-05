@@ -1,729 +1,662 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Romantic Game Night</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: linear-gradient(to right, #ff758c, #ff7eb3, #eeb8ff, #fad0c4);
-
-        }
-        .game-container {
-            display: flex;
-            justify-content: center;  /* Centers items horizontally */
-            align-items: center;      /* Centers items vertically */
-            flex-wrap: nowrap;        /* Ensures items remain in a row */
-            gap: 20px;                /* Adds spacing between cards */
-            margin-top: 20px;
-        }
-        .wheel-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-        }
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 5px solid #333;
-            background: conic-gradient(
-                red 0deg 45deg,
-                yellow 45deg 90deg,
-                green 90deg 135deg,
-                blue 135deg 180deg,
-                orange 180deg 225deg,
-                purple 225deg 270deg,
-                pink 270deg 315deg,
-                cyan 315deg 360deg
-            );
-            transition: transform 4s ease-out;
-        }
-        .arrow {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 30px solid black;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .scratch-container {
-            display: grid;
-            grid-template-columns: repeat(20, 50px);
-            grid-template-rows: repeat(50, 50px);
-            gap: 5px;
-        }
-        .scratch-card {
-            position: relative;
-            width: 50px;
-            height: 50px;
-        }
-        .scratch-image {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .scratch-overlay {
-            width: 100%;
-            height: 100%;
-            background: gray;
-            position: absolute;
-            top: 0;
-            left: 0;
-            cursor: pointer;
-        }
-        /* Responsive Styles */
-
-/* Medium screens */
-@media (max-width: 1024px) {
-    header h1 {
-        font-size: 2em;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>GameZone · Refreshed</title>
+  <!-- Font & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
-    main {
-        padding: 15px;
+    body {
+      background: #f8f0f5;
+      color: #1e1e2a;
+      scroll-behavior: smooth;
+      padding-top: 70px;
     }
 
+    /* ----- NAVBAR (mobile-first) ----- */
+    .navbar {
+      background: rgba(30, 30, 46, 0.92);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 0.7rem 1.2rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 1.9rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff6b9d, #ff2e7d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: none;
+      list-style: none;
+      gap: 2.2rem;
+    }
+
+    .nav-links a {
+      color: #eee;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 0.4rem 0;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #ff6b9d;
+      border-bottom-color: #ff6b9d;
+    }
+
+    /* hamburger */
+    .nav-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px 0;
+    }
+
+    .nav-toggle .bar {
+      width: 28px;
+      height: 3px;
+      background: white;
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+
+    .mobile-nav {
+      display: none;
+      background: rgba(20, 20, 35, 0.98);
+      backdrop-filter: blur(10px);
+      position: absolute;
+      top: 68px;
+      right: 0;
+      width: 75%;
+      max-width: 280px;
+      padding: 1.6rem 1.2rem;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      transition: 0.25s ease;
+    }
+
+    .mobile-nav.active {
+      display: block;
+    }
+
+    .mobile-nav a {
+      display: block;
+      color: #f0f0f0;
+      text-decoration: none;
+      padding: 0.8rem 0.2rem;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .mobile-nav a:last-child { border-bottom: none; }
+
+    @media (min-width: 820px) {
+      .nav-links { display: flex; }
+      .nav-toggle { display: none; }
+      .mobile-nav { display: none !important; }
+    }
+
+    /* ----- sections ----- */
+    section {
+      padding: 3rem 1.2rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #d43f6b, #b82e5a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-sub {
+      font-size: 1.15rem;
+      color: #4a3f47;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .game-card {
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(4px);
+      border-radius: 32px;
+      padding: 1.8rem 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .game-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.08); }
+
+    .btn {
+      background: #ff4d7a;
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 60px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 4px 10px rgba(255, 45, 85, 0.2);
+    }
+
+    .btn:hover { background: #e63e6a; transform: scale(0.97); }
+
+    /* kiss & dare panel (floating) */
+    .kd-panel {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 320px;
+      height: 100%;
+      background: #fff5f9;
+      padding: 2rem 1.5rem;
+      box-shadow: 6px 0 25px rgba(0,0,0,0.1);
+      z-index: 999;
+      transition: left 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+    }
+
+    .kd-panel.open { left: 0; }
+
+    .kd-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #b02b50;
+      margin-bottom: 2rem;
+    }
+
+    .kd-close-btn {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: #b02b50;
+      cursor: pointer;
+    }
+
+    .kd-section { margin-bottom: 2rem; }
+    .kd-section select { width: 100%; padding: 0.7rem; border-radius: 40px; border: 1px solid #f0b8cc; margin: 0.5rem 0; }
+
+    .kd-toggle-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      background: #ff4d7a;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 60px;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(255, 45, 85, 0.35);
+      z-index: 998;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* truth or dare wheel */
+    .circle-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .circle {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 5px solid #ff6b9d;
+      transition: transform 3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .circle-image {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .player-input {
+      padding: 0.7rem 1.2rem;
+      border-radius: 60px;
+      border: 1px solid #ddd;
+      width: 100%;
+      max-width: 320px;
+      margin: 0.5rem 0;
+    }
+
+    /* romantic spin web component fallback */
+    romantic-spin {
+      display: block;
+      margin: 1.5rem 0;
+    }
+
+    /* footer */
     footer {
-        font-size: 0.8em;
+      background: #1a1a2c;
+      color: #ccc;
+      padding: 2.5rem 1.2rem;
+      margin-top: 3rem;
     }
-}
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-grid h4 { color: white; margin-bottom: 1rem; }
+    .footer-grid ul { list-style: none; }
+    .footer-grid a { color: #aaa; text-decoration: none; line-height: 2; }
+    .footer-grid a:hover { color: #ff6b9d; }
 
-/* Small screens (tablets, phones in portrait) */
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 1.8em;
-    }
+    /* misc */
+    .flex-center { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; }
+    .mt-2 { margin-top: 2rem; }
+    .text-center { text-align: center; }
 
-    main {
-        padding: 10px;
+    /* responsive fine-tune */
+    @media (max-width: 480px) {
+      .section-title { font-size: 2rem; }
+      .circle { width: 180px; height: 180px; }
+      .kd-panel { width: 90%; }
     }
-
-    footer {
-        font-size: 0.75em;
-    }
-}
-
-/* Very small screens (phones in landscape or smaller) */
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 1.5em;
-    }
-
-    main {
-        padding: 5px;
-    }
-
-    footer {
-        font-size: 0.7em;
-    }
-
-    /* Adjusting layout for small screens */
-    .content-box {
-        margin: 10px 0;
-        padding: 10px;
-    }
-}
-    </style>
+  </style>
 </head>
 <body>
-    <h1>Romantic Game Night</h1>
-    <div class="game-container">
-        <div>
-            <h2>Spin the Wheel</h2>
-            <div class="wheel-container">
-                <div class="arrow" ></div>
-                <div class="wheel" id="wheel"></div>
-            </div>
-            <div></div>
-            <button onclick="spinWheel()">Spin</button>
-            <p id="result"></p>
-        </div>
-        </div>
-        
-        <style>
-        
-            .card {
-                position: relative;
-                width: 150px;
-                height: 200px;
-                background-color: #ddd;
-                overflow: hidden;
-            }
-            .card canvas {
-                position: absolute;
-                top: 0;
-                left: 0;
-                cursor: pointer;
-            }
-            .controls {
-                margin-top: 0px;
-            }
-        </style>
-        <h1>😍SCRATCH AND HAVE FUN 😍</h1>
-        <div class="game-container" id="game-container"></div>
-        <div class="controls">
-            <button onclick="stopTimer()">Stop Timer</button>
-            <p>Timer: <span id="timer">0</span> seconds</p>
-        </div>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                text-align: center;
-                background: linear-gradient(to right, #ff9a9e, #fad0c4);
-                margin: 0;
-                padding: 0;
-            }
-    
-            .container {
-                max-width: 600px;
-                margin: 100px auto;
-                background: white;
-                padding: 30px;
-                border-radius: 15px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-    
-            .title {
-                font-size: 36px;
-                font-weight: bold;
-                color: #ff758c;
-                margin-bottom: 20px;
-            }
-    
-            .date-idea {
-                font-size: 24px;
-                color: #333;
-                margin-bottom: 20px;
-                padding: 15px;
-                background: #ffdfd3;
-                border-radius: 10px;
-            }
-    
-            button {
-                padding: 10px 20px;
-                font-size: 18px;
-                background: #ff758c;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background 0.3s ease;
-            }
-    
-            button:hover {
-                background: #ff5263;
-            }
-        </style>
-    </head>
-    <body>
-    
-        <div class="container">
-            <div class="title">Date Night Generator 🎭</div>
-            <div id="date-idea" class="date-idea">Click the button below for a romantic date idea.</div>
-            <button onclick="generateDateNight()">Get Date Idea</button>
-        </div>
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spin the Circle - Dare Challenge</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: linear-gradient(to right, #ff9a9e, #fad0c4);
-        }
-        .activity-frame {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .circle-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 20px auto;
-        }
-        .circle {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 5px solid black;
-            position: relative;
-            transition: transform 3s ease-out;
-        }
-        .action-btn {
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background: #ff758c;
-            color: white;
-            transition: 0.3s;
-        }
-        .action-btn:hover {
-            background: #ff5263;
-        }
-        .outcome {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .player-input {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-    </style>
-</head>
-<body>
-    <div class="activity-frame">
-        <h2>Spin the Circle - Dare Challenge</h2>
-        <input type="text" id="contestants" class="player-input" placeholder="Enter players separated by commas">
-        <button class="action-btn" onclick="setContestants()">Set Contestants</button>
-        <div class="circle-container">
-            <div class="circle" id="spin-circle">
-                <img src="https://play-lh.googleusercontent.com/4Kp0-pJ_rTEw5kPawuitRgG0R5sGagHJkqLvRTXRoh7rpM7qv08E8wXEPvw2a_BkQ9vM" 
-                     alt="Spinning Wheel" class="circle-image">
-            </div>
-        </div>
-        <button class="action-btn" onclick="spinCircle()">Spin the Circle</button>
-        <p class="outcome" id="outcome"></p>
+
+<!-- ====== NAVBAR ====== -->
+<nav class="navbar">
+  <div class="navbar-container">
+
+    <a href="index.html" class="logo">GameZone</a>
+
+    <ul class="nav-links">
+      <li><a href="#friends-games">Naughty Games</a></li>
+      <li><a href="smooch.html">Smooch</a></li>
+      <li><a href="wouldyourather.html">Would You Rather</a></li>
+      <li><a href="flirtyfun.html">Flirty Fun</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="About-us.html">About Us</a></li>
+    </ul>
+
+    <div class="nav-toggle" id="nav-toggle">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
     </div>
-    
-    <style>
-        .circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 5px solid black;
-            transition: transform 3s ease-out; /* Keep consistent fast spin */
-        }
-    
-        .circle-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
-    
-    <script>
-        let currentRotation = 0; // Track accumulated rotation
-    
-        function spinCircle() {
-            const circle = document.getElementById("spin-circle");
-    
-            // Generate a random additional spin between 1800° and 3600° (fast and random)
-            let randomSpin = Math.floor(Math.random() * 1800) + 1800; 
-    
-            // Reset the transition to ensure no slowing down
-            circle.style.transition = "transform 3s ease-out";  // Set transition speed consistently
-            
-            // Accumulate the rotation
-            currentRotation += randomSpin;
-    
-            // Apply the spinning effect with no slowing down, ensuring fast and smooth
-            circle.style.transform = `rotate(${currentRotation}deg)`;
-        }
-    </script>
-    
-    
-    
-    <style>
-        .circle {
-            width: 100%; /* Adjust as needed */
-            height: 100%; /* Adjust as needed */
-            border-radius: 50%;
-            overflow: hidden; /* Ensures the image stays inside the circle */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 5px solid black;
-        }
-    
-        .circle-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures the image covers the circle properly */
-        }
-    </style>
-    
-    <script>
-        // Sample dares for the challenge
-        const dares = [
-            "Kiss your partner! 💋",
-            "Give a 30-second massage! 💆",
-            "Sing a romantic song to someone! 🎤",
-            "Do a slow dance for 1 minute! 💃",
-            "Whisper something spicy in someone’s ear! 🔥",
-            "Do 10 push-ups while someone sits on your back! 💪",
-            "Let someone draw on your face with lipstick! 💄",
-            "Take a sip of your drink without using your hands! 🍹",
-            "Compliment everyone in the group! 😊",
-            "Send a random romantic text to your last contact! 📱"
-        ];
 
-        // Declare the contestants array globally
-        let contestants = [];
+  </div>
 
-        // Function to set contestants from input
-        function setContestants() {
-            const contestantsInput = document.getElementById("contestants").value;
-            contestants = contestantsInput.split(",").map(contestant => contestant.trim());
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#friends-games">💋 Naughty Games</a>
+    <a href="smooch.html">😘 Smooch</a>
+    <a href="wouldyourather.html">🤔 Would You Rather</a>
+    <a href="flirtyfun.html">💕 Flirty Fun</a>
+    <a href="shop.html">🛍️ Shop</a>
+    <a href="About-us.html">ℹ️ About Us</a>
+  </div>
+</nav>
 
-            if (contestants.length < 2) {
-                alert("Please enter at least two contestant names!");
-                return;
-            }
-            alert("Contestants have been set. Click on 'Spin the Circle' to play!");
-        }
+<!-- ====== KISS & DARE PANEL ====== -->
+<div class="kd-panel" id="kd-panel">
+  <div class="kd-header">
+    <span>💋 Kiss & Dare</span>
+    <button class="kd-close-btn" onclick="kdClosePanel()">✕</button>
+  </div>
+  <div class="kd-section">
+    <label>Kiss type</label>
+    <select id="kd-kiss-type">
+      <option value="romantic">Romantic</option><option value="playful">Playful</option><option value="wild">Wild</option>
+    </select>
+    <button class="btn" style="width:100%;" onclick="kdShowKiss()">💋 Submit Kiss</button>
+  </div>
+  <div class="kd-section">
+    <label>Dare level</label>
+    <select id="kd-dare-level">
+      <option value="light">Light</option><option value="bold">Bold</option><option value="crazy">Crazy</option>
+    </select>
+    <button class="btn" style="width:100%;" onclick="kdShowDare()">🔥 Submit Dare</button>
+  </div>
+  <div class="kd-result" id="kd-result" style="background:white;padding:1rem;border-radius:40px;font-weight:600;">🎲 Try a kiss or dare</div>
+</div>
+<button class="kd-toggle-btn" onclick="kdTogglePanel()"><i class="fas fa-heart" style="margin-right:6px;"></i> Kiss & Dare</button>
 
-        // Shuffle function to randomly reorder the contestant list (Fisher-Yates algorithm)
-        function shuffleList(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
-            }
-        }
+<!-- ====== SECTION : Naughty Games ====== -->
+<section id="friends-games">
+  <h2 class="section-title">💞 Romantic & Intimate Games</h2>
+  <p class="section-sub">Sparks fly with playful and intimate games, perfect for couples, besties, or anyone ready for fun.</p>
 
-        // Function to spin the circle and fairly select a random contestant
-        function spinCircle() {
-            if (contestants.length < 2) {
-                alert("Please enter contestant names first!");
-                return;
-            }
+  <div class="card-grid">
+    <!-- Truth or Dare -->
+    <div class="game-card">
+      <h3>🎲 Truth or Dare</h3>
+      <input type="text" id="contestants" class="player-input" placeholder="phill, you, him, her">
+      <button class="btn" onclick="setContestants()">Set Contestants</button>
+      <div class="circle-wrapper">
+        <div class="circle" id="spin-circle">
+          <img src="https://play-lh.googleusercontent.com/4Kp0-pJ_rTEw5kPawuitRgG0R5sGagHJkqLvRTXRoh7rpM7qv08E8wXEPvw2a_BkQ9vM" alt="wheel" class="circle-image">
+        </div>
+      </div>
+      <button class="btn" onclick="spinCircle()">Spin the Circle</button>
+      <p class="outcome" id="outcome" style="margin-top:1rem;font-weight:600;">Ready to spin</p>
+    </div>
 
-            // Shuffle the contestants array to ensure a fair distribution
-            shuffleList(contestants);
+    <!-- Never or Ever (embedded) -->
+    <div class="game-card">
+      <h3>🎉 Never or Ever</h3>
+      <div id="ne-prompt-display" style="min-height:70px;font-weight:500;margin:1rem 0;">Click below to begin!</div>
+      <button class="btn" id="ne-generate-btn">🔄 Show Prompt</button>
+      <p style="font-size:0.8rem;margin-top:0.5rem;color:#777;">honest answers only 😏</p>
+    </div>
+  </div>
+</section>
 
-            // Get the circle and outcome display elements
-            const circle = document.getElementById("spin-circle");
-            const outcome = document.getElementById("outcome");
+<!-- ====== SECTION : Romantic Wheel ====== -->
+<section id="new-arrivals">
+  <h2 class="section-title">🎡 Romantic Wheel</h2>
+  <p class="section-sub">Turn down the lights, turn up the connection</p>
+  <div class="game-card" style="max-width:600px;margin:0 auto;">
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;">
+      <input id="partner1" type="text" placeholder="Partner 1" style="padding:0.6rem 1rem;border-radius:40px;border:1px solid #ddd;flex:1;min-width:120px;">
+      <input id="partner2" type="text" placeholder="Partner 2" style="padding:0.6rem 1rem;border-radius:40px;border:1px solid #ddd;flex:1;min-width:120px;">
+      <button class="btn" onclick="startRomanticGame()">💖 Start</button>
+    </div>
+    <div id="welcomeMessage" style="margin:1rem 0;font-weight:600;display:none;"></div>
+    <div id="wheel-container" style="display:none;margin:1.5rem 0;">
+      <div id="wheel" style="width:200px;height:200px;border-radius:50%;margin:0 auto;border:6px solid white;background:conic-gradient(#ffd6d6 0% 25%, #ffe2e2 25% 50%, #ffc7c7 50% 75%, #ffeaea 75% 100%);transition: transform 4s ease-out;"></div>
+      <button class="btn" onclick="spinRomanticWheel()" style="margin-top:1rem;">🎡 Spin</button>
+    </div>
+    <div id="resultMessage" style="font-weight:600;margin-top:1rem;display:none;"></div>
+  </div>
+</section>
 
-            // Spin the circle fast
-            let randomSpin = Math.floor(Math.random() * 3600) + 1800;  // Random fast spin between 1800° and 3600°
-            let duration = 4000; // Total time the spin will take (4 seconds)
+<!-- ====== SECTION : Featured / Friends Games ====== -->
+<section id="featured">
+  <h2 class="section-title">👫 Friends & Party Games</h2>
+  <p class="section-sub">Featured games getting all the attention this month!</p>
+  <div class="card-grid">
+    <!-- PairUp -->
+    <div class="game-card">
+      <h3>💞 PairUp – Duo Challenge</h3>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin:0.5rem 0;">
+        <select id="vibe" style="padding:0.5rem;border-radius:40px;border:1px solid #ddd;">
+          <option value="default">Default</option><option value="romance">City of Love</option><option value="ocean">Tropical</option><option value="chill">Chill</option>
+        </select>
+        <button class="btn" onclick="launchPairUp()">Launch</button>
+      </div>
+      <div id="pairup-board" style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem;max-width:320px;margin:1rem auto;"></div>
+      <div id="pairup-clock" style="font-weight:600;">⏱️ 0s</div>
+    </div>
 
-            // Apply the fast spin to the circle
-            circle.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`; // Fast spin with easing
-            circle.style.transform = `rotate(${randomSpin}deg)`;  // Spin the circle
+    <!-- Live Stats (mini) -->
+    <div class="game-card">
+      <h3>📊 Live Stats</h3>
+      <div style="display:flex;justify-content:space-around;flex-wrap:wrap;">
+        <div><span style="font-weight:700;">👥</span> <span class="stat-count" data-target="34700">0</span></div>
+        <div><span style="font-weight:700;">🌐</span> <span class="stat-count" data-target="128000">0</span></div>
+        <div><span style="font-weight:700;">🎮</span> <span class="stat-count" data-target="59000">0</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            // Once the spinning finishes, calculate the resulting contestant
-            setTimeout(() => {
-                // Calculate the landed position based on the rotation
-                let finalDegree = randomSpin % 360;  // Get the final position of the circle
-                let numberOfSections = contestants.length;  // Number of contestants (sections of the circle)
-                let sectionSize = 360 / numberOfSections; // Size of each section (degree per contestant)
+<!-- ====== SHOP placeholder ====== -->
+<section id="shop" style="background:linear-gradient(145deg,#fce4ec,#f8e8ef);border-radius:60px 60px 0 0;padding:3rem 1.5rem;">
+  <h2 class="section-title">🛍️ Game Shop</h2>
+  <p class="section-sub">Coming soon – exclusive decks & accessories.</p>
+  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
+    <div style="background:white;padding:1.5rem;border-radius:40px;width:180px;box-shadow:0 4px 12px rgba(0,0,0,0.04);">🔥 Truth or Dare deck</div>
+    <div style="background:white;padding:1.5rem;border-radius:40px;width:180px;box-shadow:0 4px 12px rgba(0,0,0,0.04);">💋 Romantic dice set</div>
+  </div>
+</section>
 
-                // Find which contestant the circle landed on
-                let landedIndex = Math.floor(finalDegree / sectionSize);
-                const selectedContestant = contestants[landedIndex];
-                const randomDare = dares[Math.floor(Math.random() * dares.length)];
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="footer-grid">
+    <div><h4>GameZone</h4><p style="color:#888;">playful connections</p></div>
+    <div><h4>Quick</h4><ul><li><a href="#friends-games">Naughty</a></li><li><a href="#new-arrivals">Romantic</a></li><li><a href="#featured">Friends</a></li></ul></div>
+    <div><h4>Contact</h4><ul><li><a href="#">spencemiles0@gmail.com</a></li><li><a href="#">+254 790 617 211</a></li></ul></div>
+    <div><h4>Social</h4><div style="display:flex;gap:1rem;font-size:1.6rem;color:#ff6b9d;"><i class="fab fa-instagram"></i><i class="fab fa-twitter"></i><i class="fab fa-youtube"></i></div></div>
+  </div>
+  <div style="text-align:center;margin-top:2.5rem;border-top:1px solid #333;padding-top:1.5rem;color:#666;">© 2025 GameZone · developed by Phill</div>
+</footer>
 
-                // Display the outcome
-                outcome.innerHTML = `${selectedContestant}, your challenge: ${randomDare}`;
-                startChallengeTimer();  // Optionally add a timer for the challenge
-            }, duration);
-        }
+<!-- ============================================================ -->
+<!-- JAVASCRIPT : All upgraded features -->
+<script>
+  // -------- NAV TOGGLE --------
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('nav-toggle');
+    const mobileNav = document.getElementById('mobileNav');
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      mobileNav.classList.toggle('active');
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.navbar')) mobileNav.classList.remove('active');
+    });
+  });
 
-        // Timer function (optional)
-        function startChallengeTimer() {
-            let timeLeft = 30;  // Set a 30-second timer for the challenge
-            const timerDisplay = document.createElement('p');
-            const outcome = document.getElementById("outcome");
-            outcome.appendChild(timerDisplay);
-            const timer = setInterval(() => {
-                timerDisplay.innerText = `Time left: ${timeLeft}s`;
-                timeLeft--;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    timerDisplay.innerText = "Time's up! 🍑";
-                }
-            }, 1000);
-        }
+  // -------- KISS & DARE PANEL --------
+  function kdTogglePanel() {
+    document.getElementById('kd-panel').classList.toggle('open');
+  }
+  function kdClosePanel() {
+    document.getElementById('kd-panel').classList.remove('open');
+  }
+  const kdKissOptions = {
+    romantic: ["A kiss on the forehead", "A soft kiss at sunset", "A morning kiss on the cheek", "A gentle whisper and kiss", "A kiss while holding hands"],
+    playful: ["A peck on the nose", "An upside-down kiss", "A ticklish kiss", "A kiss while giggling", "A sneak attack kiss"],
+    wild: ["A deep passionate kiss", "A surprise wall kiss", "A kiss on the neck", "A heated kitchen kiss", "A spontaneous makeout"]
+  };
+  const kdDareOptions = {
+    light: ["Compliment your partner seductively", "Hold hands for 1 minute", "Do a shy smile kiss", "Draw a heart on their palm"],
+    bold: ["Dance sensually for 30 seconds", "Blindfold and kiss your partner", "Touch their cheek slowly", "Kiss with eyes closed"],
+    crazy: ["Give a striptease (keep it playful)", "Lick something sweet off them", "Let them tie your hands for 1 minute", "Seduce them with a whisper"]
+  };
+  function kdShowKiss() {
+    const type = document.getElementById('kd-kiss-type').value;
+    const list = kdKissOptions[type] || kdKissOptions.romantic;
+    document.getElementById('kd-result').textContent = '💋 ' + list[Math.floor(Math.random() * list.length)];
+  }
+  function kdShowDare() {
+    const level = document.getElementById('kd-dare-level').value;
+    const list = kdDareOptions[level] || kdDareOptions.light;
+    document.getElementById('kd-result').textContent = '🔥 ' + list[Math.floor(Math.random() * list.length)];
+  }
 
-    </script>
-</body>
-</html>
+  // -------- TRUTH OR DARE (spin) --------
+  let contestants = [], totalRotation = 0;
+  function setContestants() {
+    const raw = document.getElementById('contestants').value.trim();
+    if (raw) { contestants = raw.split(',').map(s => s.trim()).filter(Boolean); document.getElementById('outcome').textContent = '✅ Contestants set!'; }
+    else alert('Enter names separated by commas');
+  }
+  function spinCircle() {
+    if (!contestants.length) { alert('Set contestants first'); return; }
+    const el = document.getElementById('spin-circle');
+    const deg = 3600 + Math.floor(Math.random() * 360);
+    totalRotation += deg;
+    el.style.transform = `rotate(${totalRotation}deg)`;
+    setTimeout(() => {
+      const player = contestants[Math.floor(Math.random() * contestants.length)];
+      const action = Math.random() < 0.5 ? 'Truth' : 'Dare';
+      const q = action === 'Truth' ? ['What\'s your secret?','Most embarrassing moment?','Ever lied in this game?'] : ['Sing a song','Do a silly dance','Lick your elbow'];
+      document.getElementById('outcome').textContent = `${player} → ${action}: ${q[Math.floor(Math.random()*q.length)]}`;
+    }, 3000);
+  }
 
-        <script>
-            const dateIdeas = [
-                "Candlelit dinner at home 🍷",
-                "Movie night with popcorn 🍿",
-                "Stargazing with cozy blankets ✨",
-                "Spa night with massages 💆",
-                "Cooking a new recipe together 🍳",
-                "Board game night with snacks 🎲",
-                "A scenic sunset walk 🌅",
-                "DIY wine and paint night 🎨",
-                "Road trip to a mystery location 🚗",
-                "Dancing in the living room 💃",
-                "Ice cream date 🍦",
-                "A picnic in the park 🧺",
-                "Trying a new restaurant 🍽️",
-                "Exploring a nearby town 🏙️",
-                "Watching old home videos 🎥",
-                "Building a fort and watching movies 🏰",
-                "Hiking and enjoying nature ⛰️",
-                "Writing love letters to each other 💌",
-                "Taking a bubble bath together 🛁",
-                "Going on a late-night drive 🚙",
-                "Karaoke night at home 🎤",
-                "At-home game night with your favorite video games 🎮",
-                "Going to a comedy club for laughs 😂",
-                "Sunset picnic by the lake 🏞️",
-                "Dance class together 💃",
-                "Taking a cooking class together 🍝",
-                "Going to a local art gallery 🎨",
-                "Drive-in movie theater night 🍿",
-                "Going to a theme park 🎢",
-                "Staying up late and stargazing ✨",
-                "Writing poetry for each other 📝",
-                "Play a sport together (e.g. tennis, bowling) 🎾",
-                "Create a scrapbook of your favorite memories 📚",
-                "Go ice skating together ⛸️",
-                "Volunteer together for a cause you both care about 💖",
-                "A day at the zoo or aquarium 🐒🐠",
-                "Night at a jazz bar 🎷",
-                "Try a new coffee shop for a cozy date ☕",
-                "Visit a nearby botanical garden 🌸",
-                "Going horseback riding 🐎",
-                "Camping under the stars 🏕️",
-                "Visit a haunted house or escape room 🕵️‍♀️",
-                "Go on a bike ride together 🚲",
-                "Make a playlist of songs that remind you of each other 🎶",
-                "Take a pottery class together 🍶",
-                "Watch the sunrise together 🌅",
-                "Do a photo shoot with each other 📸",
-                "Explore a farmer’s market together 🥕",
-                "Plan your dream vacation together ✈️",
-                "Try a dance-off at home 🕺",
-                "Build a snowman (if it’s winter) ☃️",
-                "Go for a long walk in the rain 🌧️",
-                "Take a day trip to a nearby town or village 🚗",
-                "Go thrift shopping together 🛍️",
-                "Read a book together 📚",
-                "Visit an amusement park 🎡",
-                "Play a fun outdoor game together (like frisbee or badminton) 🏸",
-                "Attend a local event or festival 🎪",
-                "Watch the sunset from the beach 🌊",
-                "Go for a drive with no destination in mind 🚙",
-                "Take a scenic train ride 🚂",
-                "Try a cooking competition at home 🍴",
-                "Rent a boat for the day ⛵",
-                "Go to a wine or beer tasting together 🍷",
-                "Attend a live concert or show 🎶",
-                "Spend the day at an animal sanctuary 🦄",
-                "Do a puzzle together 🧩",
-                "Visit a museum or science center 🏛️",
-                "Go to a rooftop bar or restaurant 🍸",
-                "Take a dance class together 💃",
-                "Try a couples’ yoga class 🧘‍♀️",
-                "Have a DIY cocktail night 🍹",
-                "Watch a romantic movie under the stars 🌟"
-            ];
-    
-            function generateDateNight() {
-                const randomIndex = Math.floor(Math.random() * dateIdeas.length);
-                const dateIdea = dateIdeas[randomIndex];
-                document.getElementById("date-idea").innerText = dateIdea;
-            }
-        </script>
-        <script>
-            let cards = [
-                { name: "Prize 1", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Wiki-missionary.png/640px-Wiki-missionary.png" },
-                { name: "Prize 2", image: "https://hips.hearstapps.com/hmg-prod/images/unspecified-5-1481652714.jpg" },
-                { name: "Prize 3", image: "https://hips.hearstapps.com/hmg-prod/images/2-low-down-reverse-cowgirl-66bd0eb81066b.jpg?crop=0.888888888888889xw:1xh;center,top" },
-                { name: "Prize 4", image: "https://upload.wikimedia.org/wikipedia/commons/2/20/Wiki-spoons-sp.png" },
-                { name: "Prize 5", image: "https://cdn.shopify.com/s/files/1/0583/1816/0063/files/Holding_your_partner_against_the_wall_Standing_Position.png?v=1716839020" }
-            ];
-            let timer = 0, timerInterval;
-    
-            function startTimer() {
-                if (!timerInterval) {
-                    timerInterval = setInterval(() => {
-                        document.getElementById("timer").innerText = ++timer;
-                    }, 1000);
-                }
-            }
-    
-            function stopTimer() {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-    
-            function createScratchCard(cardData, index) {
-                const card = document.createElement("div");
-                card.classList.add("card");
-                
-                const img = document.createElement("img");
-                img.src = cardData.image;
-                img.style.width = "100%";
-                img.style.height = "100%";
-                card.appendChild(img);
-                
-                const canvas = document.createElement("canvas");
-                canvas.width = 150;
-                canvas.height = 200;
-                card.appendChild(canvas);
-                
-                const ctx = canvas.getContext("2d");
-                ctx.fillStyle = "gray";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                let isScratching = false;
-                canvas.addEventListener("mousedown", () => isScratching = true);
-                canvas.addEventListener("mouseup", () => isScratching = false);
-                canvas.addEventListener("mousemove", (e) => {
-                    if (isScratching) {
-                        const rect = canvas.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        ctx.clearRect(x, y, 20, 20);
-                        startTimer();
-                    }
-                });
-                return card;
-            }
-    
-            function loadGame() {
-                const container = document.getElementById("game-container");
-                container.innerHTML = "";
-                let selectedCards = cards.sort(() => 0.5 - Math.random()).slice(0, 3);
-                selectedCards.forEach((card, index) => {
-                    container.appendChild(createScratchCard(card, index));
-                });
-            }
-    
-            loadGame();
-        </script>
-    
-    <script>
-        let currentDegree = 0;
-
-        function spinWheel() {
-            const wheel = document.getElementById("wheel");
-            const result = document.getElementById("result");
-        
-            // Set the spin duration and total rotations
-            const baseSpeed = 1440;  // Min spin speed (4 rotations)
-            const randomDegree = baseSpeed + Math.floor(Math.random() * 360) + 1800;  // Ensure the wheel spins at least 5 times
-            const totalRotation = currentDegree + randomDegree;
-        
-            // Set a fixed spin speed for all spins (4 seconds)
-            const spinDuration = 4;  // in seconds
-        
-            // Apply the spin speed (same duration for each spin)
-            wheel.style.transition = `transform ${spinDuration}s ease-out`;
-            wheel.style.transform = `rotate(${totalRotation}deg)`;
-        
-            // Update the current degree for the next spin
-            currentDegree += randomDegree;
-        
-            setTimeout(() => {
-                const sections = [
-                    "Give a hug", "Say I love you", "Compliment your partner", "Hold hands for 1 minute", 
-                    "Share a sweet secret", "Do a funny dance", "Whisper something romantic", 
-                    "Look into each other's eyes for 30 seconds", "Give a forehead kiss", "Write a love note", 
-                    "Give a back massage", "Share your favorite memory together", "Sing a love song", 
-                    "Slow dance together", "Tell your partner what you love most about them", "Give a playful tickle", 
-                    "Share a piece of chocolate", "Surprise your partner with a small gift", "Say something sweet in another language", 
-                    "Share a happy memory from your relationship", "Cook something together", "Watch a romantic movie together", 
-                    "Hold your partner’s face gently and smile", "Give a small peck on the nose", "Say what you admire about your partner", 
-                    "Share a dream or goal with each other", "Draw a heart on your partner’s palm", "Take a silly selfie together", 
-                    "Hold your partner from behind", "Say your favorite thing about their personality", "Give a loving nudge or playful push", 
-                    "Write I love you on their hand with your finger", "Pretend you just met and flirt with your partner", 
-                    "Share your favorite inside joke", "Gaze at the stars together even if it's indoors", "Make a pinky promise", 
-                    "Tell your partner your favorite feature about them", "Give a loving high-five", "Say something poetic to your partner", 
-                    "Make a heart shape with your hands", "Mimic the way your partner talks or laughs playfully", "Dance without music for 30 seconds", 
-                    "Give a kiss on the hand", "Say you mean the world to me", "Hold your partner close for 10 seconds", 
-                    "Pretend to propose or do it for real", "Blow a kiss from across the room", "Create a secret handshake", 
-                    "Feed your partner a bite of something sweet", "Wink at your partner flirtatiously", "Trace your partner's face with your finger", 
-                    "Say I'm lucky to have you", "Write a short love poem on a napkin or paper", "Plan a surprise date idea", 
-                    "Play a romantic song and hum along", "Do an exaggerated romantic gesture from a movie", "Try to make each other laugh for 1 minute", 
-                    "Say what your life would be like without them", "Wrap your arms around your partner like a cozy blanket", 
-                    "Whisper a sweet nickname in their ear", "Pretend to be a famous romantic couple", "Read a short love quote aloud", 
-                    "Draw a picture of your partner", "Share one thing you’ve never told them before", "Say what makes your partner unique and special", 
-                    "Call your partner by a pet name in a dramatic way", "Blow a raspberry on their cheek or hand", 
-                    "Make a heart with your fingers and hold it up to them", "Tell your partner something you find irresistible about them", 
-                    "Give a warm forehead touch", "Say you're my favorite person in the world", "Describe how your partner makes your life better", 
-                    "Take turns writing a short love story together", "Say what made you fall in love with them", "Try to guess each other's favorite romantic movie", 
-                    "Act out a cute romantic scene from a movie", "Tell your partner what color reminds you of them and why", "Do an air kiss from far away", 
-                    "Give a butterfly kiss blink your eyelashes on their skin", "Share one fun fact about your love story", 
-                    "Draw a heart somewhere on their hand with your finger", "Make a wish together while holding hands", "Reminisce about your first date", 
-                    "Share a favorite song lyric about love", "Say how you knew they were the one", "Write I love you in a creative way backwards symbols etc", 
-                    "Have a mini staring contest with a twist whoever smiles first loses", "Whisper I miss you even if they are right there", 
-                    "Pretend to be in a romantic movie and act it out", "Make a cute little sketch of both of you together", "Give a sweet kiss on the cheek", 
-                    "Say you complete me in your most dramatic voice", "Tell your partner a romantic fantasy you have", "Do a goofy love dance to make them laugh", 
-                    "Write down three things you adore about them and read them out loud", "Play a quick romantic guessing game guess my favorite memory of us", 
-                    "Leave a surprise love note somewhere for them to find later", "Say what your ideal romantic date with them would be", 
-                    "End with a long warm hug"
-                ];
-        
-                // Pick a random index from the sections array
-                const randomIndex = Math.floor(Math.random() * sections.length);
-                result.innerText = "Result: " + sections[randomIndex];
-            }, spinDuration * 1000); // Wait for the animation to complete before showing the result
-        }
-        // Function to handle dynamic resizing
-function adjustLayout() {
-    const screenWidth = window.innerWidth;
-
-    // Example: Adjust header font size based on screen width
-    const header = document.querySelector('header h1');
-    if (screenWidth <= 480) {
-        header.style.fontSize = '1.5em';  // Smaller screens
-    } else if (screenWidth <= 768) {
-        header.style.fontSize = '2em';  // Medium screens
-    } else if (screenWidth <= 1024) {
-        header.style.fontSize = '2.5em';  // Larger tablets or small desktops
-    } else {
-        header.style.fontSize = '3em';  // Large screens like desktops
+  // -------- NEVER OR EVER (standalone) --------
+  const neverEverPrompts = [
+    "Never have I ever eaten something from the floor after the 5-second rule.",
+    "I have danced in the rain and loved it.",
+    "Never have I ever pranked my sibling and denied it.",
+    "I have stayed up all night binge-watching a series.",
+    "Never have I ever written a love letter.",
+    "I have had a crush on someone at work or school.",
+    "Never have I ever fallen in love at first sight.",
+    "I have planned a surprise date for someone special.",
+    "Never have I ever had a secret fantasy I never told anyone.",
+    "I have cuddled with someone all night.",
+    "Never have I ever kissed someone unexpectedly.",
+    "I have flirted with someone just for fun.",
+    "Never have I ever been turned on during a Zoom call 😳",
+    "I have shared a bed but didn’t sleep much... 😏"
+  ];
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('ne-generate-btn');
+    const display = document.getElementById('ne-prompt-display');
+    if (btn && display) {
+      btn.addEventListener('click', () => {
+        const prompt = neverEverPrompts[Math.floor(Math.random() * neverEverPrompts.length)];
+        display.textContent = prompt;
+        display.style.opacity = 0.7;
+        setTimeout(() => display.style.opacity = 1, 50);
+      });
     }
+  });
 
-    // Example: Adjust the padding of the main content
-    const main = document.querySelector('main');
-    if (screenWidth <= 480) {
-        main.style.padding = '5px';
-    } else if (screenWidth <= 768) {
-        main.style.padding = '10px';
-    } else if (screenWidth <= 1024) {
-        main.style.padding = '15px';
-    } else {
-        main.style.padding = '20px';
+  // -------- ROMANTIC WHEEL --------
+  let romanticActions = ["Give a hug", "Say I love you", "Compliment your partner", "Hold hands for 1 minute", "Share a sweet secret", "Do a funny dance", "Whisper something romantic", "Look into each other's eyes for 30 seconds", "Give a forehead kiss", "Write a love note", "Give a back massage", "Share your favorite memory", "Sing a love song", "Slow dance together"];
+  let currentDegreeWheel = 0;
+  function startRomanticGame() {
+    const p1 = document.getElementById('partner1').value.trim(), p2 = document.getElementById('partner2').value.trim();
+    if (!p1 || !p2) { alert('Enter both names'); return; }
+    document.getElementById('welcomeMessage').style.display = 'block';
+    document.getElementById('welcomeMessage').textContent = `✨ ${p1} & ${p2}, let's get romantic!`;
+    document.getElementById('wheel-container').style.display = 'block';
+    document.getElementById('resultMessage').style.display = 'none';
+  }
+  function spinRomanticWheel() {
+    const wheel = document.getElementById('wheel');
+    const deg = 1440 + Math.floor(Math.random() * 360) + 1800;
+    currentDegreeWheel += deg;
+    wheel.style.transform = `rotate(${currentDegreeWheel}deg)`;
+    setTimeout(() => {
+      const msg = romanticActions[Math.floor(Math.random() * romanticActions.length)];
+      document.getElementById('resultMessage').style.display = 'block';
+      document.getElementById('resultMessage').textContent = '💖 ' + msg;
+    }, 4000);
+  }
+
+  // -------- PAIRUP (duo challenge) --------
+  const vibeIcons = {
+    default: ['💖','💌','💋','🌹','😘','🏱','🧸','👩‍❤️‍👨'],
+    romance: ['🗼','🥐','🍷','🧁','🎨','🚲','💋','💌'],
+    ocean: ['🌴','🍹','👙','☀️','🏖️','🕶️','🏄‍♀️','💦'],
+    chill: ['🎬','🍕','📺','🍿','🛋️','💤','🎷','❤️']
+  };
+  let pairTimer, pairSeconds = 0, pairOpen = [], pairScore = 0, pairBoard = [];
+  function launchPairUp() {
+    const board = document.getElementById('pairup-board');
+    board.innerHTML = '';
+    pairOpen = []; pairScore = 0; pairSeconds = 0; clearInterval(pairTimer);
+    document.getElementById('pairup-clock').textContent = '⏱️ 0s';
+    const vibe = document.getElementById('vibe').value;
+    const icons = vibeIcons[vibe] || vibeIcons.default;
+    let deck = [...icons, ...icons];
+    for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [deck[i],deck[j]]=[deck[j],deck[i]]; }
+    pairBoard = deck;
+    deck.forEach((symbol, idx) => {
+      const tile = document.createElement('div');
+      tile.style.cssText = 'background:#ffc1e3;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:2rem;aspect-ratio:1/1;cursor:pointer;transition:0.2s;';
+      tile.dataset.symbol = symbol;
+      tile.dataset.index = idx;
+      tile.addEventListener('click', () => pairReveal(tile));
+      board.appendChild(tile);
+    });
+    pairTimer = setInterval(() => { pairSeconds++; document.getElementById('pairup-clock').textContent = `⏱️ ${pairSeconds}s`; }, 1000);
+  }
+  function pairReveal(tile) {
+    if (tile.classList.contains('paired') || pairOpen.includes(tile)) return;
+    tile.textContent = tile.dataset.symbol;
+    tile.style.background = '#ff8aae';
+    pairOpen.push(tile);
+    if (pairOpen.length === 2) {
+      const [a,b] = pairOpen;
+      if (a.dataset.symbol === b.dataset.symbol) {
+        a.classList.add('paired'); b.classList.add('paired'); pairScore += 2;
+        a.style.background = '#ff4d7a'; b.style.background = '#ff4d7a';
+        if (pairScore === 16) clearInterval(pairTimer);
+        pairOpen = [];
+      } else {
+        setTimeout(() => {
+          a.textContent = ''; b.textContent = ''; a.style.background = '#ffc1e3'; b.style.background = '#ffc1e3';
+          pairOpen = [];
+        }, 700);
+      }
     }
-}
+  }
 
-// Call adjustLayout function when the page loads or when resizing the window
-window.addEventListener('load', adjustLayout);
-window.addEventListener('resize', adjustLayout);
+  // -------- LIVE STATS COUNTER --------
+  document.querySelectorAll('.stat-count').forEach(el => {
+    const target = +el.dataset.target;
+    let current = 0;
+    const step = Math.ceil(target / 40);
+    const update = () => {
+      current += step;
+      if (current < target) { el.textContent = current.toLocaleString(); requestAnimationFrame(update); }
+      else el.textContent = target.toLocaleString();
+    };
+    update();
+  });
 
-    </script>
-   
+  // -------- CLOSE PANEL ON OUTSIDE CLICK --------
+  document.addEventListener('click', (e) => {
+    const panel = document.getElementById('kd-panel');
+    const toggle = document.querySelector('.kd-toggle-btn');
+    if (!panel.contains(e.target) && !toggle.contains(e.target) && panel.classList.contains('open')) {
+      panel.classList.remove('open');
+    }
+  });
+</script>
 </body>
 </html>
